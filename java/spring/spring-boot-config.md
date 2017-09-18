@@ -3,7 +3,7 @@
 > @ImportResource('classpath:spring-bean.xml')
 > 
 > 添加使用导入 spring.xml  等xml的配置入口文件
-
+>
 > @ConfigurationProperties 读取配置主文件中的文件
  
  ``` java
@@ -17,9 +17,11 @@
 
 ```
 
+>
 >  导入文件 自定义配置文件
 >
->  @PropertySource（‘mysql.propertis’） 
+>  @PropertySource（‘mysql.propertis’）
+>
 
 ``` js
 
@@ -53,5 +55,30 @@
  spring.profile.active=prod
 
  启动时候:  启动shell脚本中，动态指定，例如 java -jar spring-boot-SNAPSHOT.jar --spring.profiles.active=prod
+
+```
+
+###  bean中应用application.yml 中的值
+
+``` js
+  在application.properties
+
+  com.didispace.blog.name=程序猿DD
+  com.didispace.blog.title=Spring Boot教程
+  // 连续的应用
+  com.didispace.blog.desc=${com.didispace.blog.name}正在努力写《${com.didispace.blog.title}》
+
+```
+
+``` java
+
+  @Data
+  @Component
+  public class BlogProperties {
+      @Value("${com.didispace.blog.name}")
+      private String name;
+      @Value("${com.didispace.blog.title}")
+      private String title;
+  }
 
 ```
