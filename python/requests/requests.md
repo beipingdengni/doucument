@@ -1,6 +1,6 @@
 ### pythons中，用作网络请求。。 <br/> 网络爬虫
 
-![官方图片](https://github.com/beipingdengni/doucument/tree/master/python/images/requests-sidebar.png)
+![官方图片](https://github.com/beipingdengni/doucument/blob/master/python/image/requests-sidebar.png)
 
 #### 官方文档
 [中文文档](http://docs.python-requests.org/zh_CN/latest/user/quickstart.html)
