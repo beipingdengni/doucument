@@ -1,31 +1,31 @@
 ### 关于自己学习笔记相关记录
 
 ---
-# JAVA
+## JAVA
  
-## spring 
+#### spring 
 
-## spring mvc
+#### spring mvc
 
-## spring boot
+#### spring boot
 
-## spring cloud
+#### spring cloud
 
 ---
 
-# Python
+## Python
 
-## Flask
+#### Flask
 
-## requests
+#### requests
 
-## django
+#### django
 
--- 
+---
 
-# GO 
+## GO 
 
-## goworker
+#### goworker
 
-## beego
+#### beego
 
