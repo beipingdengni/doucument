@@ -1,5 +1,7 @@
 ###  文件配置
 
+
+>
 > @ImportResource('classpath:spring-bean.xml')
 > 
 > 添加使用导入 spring.xml  等xml的配置入口文件
