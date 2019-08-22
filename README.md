@@ -1,51 +1,52 @@
 ### 关于自己学习笔记相关记录
 
----
+------
 
-#### [工具](./)
+#### [工具]
 
-###### gradle
+###### [gradle]()
 
 ###### maven
 
+------
 
+#### [database](./database)
 
-### [database](./database)
+###### [mysql](https://github.com/beipingdengni/doucument/blob/master/database/mysql.md)
 
-#### mysql
+###### postgresql
 
-#### postgresql
+###### monogodb
 
-#### monogodb
+###### [redis](https://github.com/beipingdengni/doucument/blob/master/database/redis.md)
 
-#### redis
+------
 
----
-### [JAVA](./java)
+#### [JAVA](./java)
 
-#### spring 
+###### spring 
 
-#### spring mvc
+###### spring mvc
 
-#### spring boot
+###### spring boot
 
-#### spring cloud
+###### spring cloud
 
----
+------
 
-### Python
+#### Python
 
-#### Flask
+###### Flask
 
-#### requests
+###### requests
 
-#### django
+###### django
 
----
+------
 
-### GO 
+##### GO 
 
-#### goworker
+###### goworker
 
-#### beego
+###### beego
 
