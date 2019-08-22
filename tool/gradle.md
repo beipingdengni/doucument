@@ -76,7 +76,6 @@ uploadArchives {
 *  snapshots(enabled:!mavenUpload,updatePolicy:'always',checksumPolicy:'warn')
 * }
 */
-
 ```
 
 ##### 配置文件外引用
@@ -90,6 +89,7 @@ allprojects {
 // 2、修改 web 模块，web/build.gradle 增加配置：
 apply from: "${rootProject.projectDir}/common.gradle"
 // ===============================================================================
+// ScalaLanguageSourceSet [scala 语言]
 sourceSets {
    main {
       java {
@@ -154,5 +154,36 @@ release {
             net.researchgate.release.GitAdapter,
     ]
 }
+// ===============================================================================
+// pom 设置基本数据
+ pom.project {
+   name 'Example Application'
+   packaging 'jar'
+   // optionally artifactId can be defined here 
+   description 'A application used as an example on how to set up 
+   pushing its components to the Central Repository . '
+   url 'http://www.example.com/example-application'
+
+   scm {
+     connection 'scm:git:git@github.com:username/project.git'
+     developerConnection 'scm:git:git@github.com:username/project.git'
+     url 'https://github.com/username/project'
+   }
+
+   licenses {
+     license {
+       name 'The Apache License, Version 2.0'
+       url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+     }
+   }
+
+   developers {
+     developer {
+       id 'manfred'
+       name 'Manfred Moser'
+       email 'manfred@sonatype.com'
+     }
+   }
+ }
 ```
 
