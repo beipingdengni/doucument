@@ -2,9 +2,9 @@
 
 ------
 
-#### [工具]
+#### [工具](./tool)
 
-###### [gradle]()
+###### [gradle](https://github.com/beipingdengni/doucument/blob/master/tool/gradle.md)
 
 ###### maven
 
