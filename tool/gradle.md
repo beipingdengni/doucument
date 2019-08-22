@@ -27,6 +27,7 @@ subprojects {
   // 组织名称 与 版本号
   group 'com.tian'
   version '1.1.0-SNAPSHOT'
+  // 设置的环境参数
   ext {
     compileJava.options.encoding = 'UTF-8'
     compileTestJava.options.encoding = 'UTF-8'
