@@ -89,8 +89,7 @@ allprojects {
 
 // 2、修改 web 模块，web/build.gradle 增加配置：
 apply from: "${rootProject.projectDir}/common.gradle"
-
-
+// ===============================================================================
 sourceSets {
    main {
       java {
@@ -101,13 +100,12 @@ sourceSets {
       }
    }
 }
-
+// ===============================================================================
 //获取 common.gradle 依赖插件配置
 buildscript {
     repositories {
         jcenter()
     }
-
     dependencies {
         classpath 'net.researchgate:gradle-release:2.4.0' // release plugin
     }
@@ -117,7 +115,21 @@ buildscript {
 ##### 扩展功能
 
 ```
+gradle release // 执行所有模块
+gradle :release // 只执行父模块
+gradle web:release // 只执行 web 子模块
+gradle web:release api:release //只执行 web、api子模块
+// ===============================================================================
+//插件使用
+apply plugin: 'application'
 
+group = "com.gradle.api"
+version = "${rootProject.version}" //也可以不写，默认继承父模块 version
+description = "this is gradle api demo"
+archivesBaseName = 'gradle_api'
+
+mainClassName = "com.gradle.api.Main" //指定 Jar 启动 Main
+// ===============================================================================
 clean 本地包
     task deleteDescriptors(type: Exec) { //执行shell命令
         executable "sh"
@@ -128,8 +140,7 @@ clean 本地包
     task clean(type: Delete, dependsOn: deleteDescriptors) { //clean工程时顺带执行上述任务
         delete rootProject.buildDir
     }
-
-
+// ===============================================================================
 gradle-release 插件     文档：https://www.ctolib.com/mip/gradle-release.html
 
 plugins {
