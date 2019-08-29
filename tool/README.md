@@ -10,6 +10,16 @@
 
 
 
+##### docker 命令集合
+
+```
+查看容器所以id： docker ps -aq
+
+
+```
+
+
+
 ##### docker 创建nexus3
 
 ```
