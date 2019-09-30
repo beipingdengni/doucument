@@ -41,6 +41,22 @@ repository-impl-postfix="Impl"/>
 框架扫描到 AccountDao 接口时，它将尝试在相同的包目录下查找 AccountDaoImpl.java，如果找到，便将其中的实现方法作为最终生成的代理类中相应方法的实现
 ```
 
+spring boot 处理 
+
+参考博客：
+
+https://www.cnblogs.com/coderjinjian/p/9686729.html 【多数据源】
+
+https://blog.csdn.net/chukun123/article/details/82861361 【多数据源、读写分离】
+
+```
+@Bean("secondaryDataSource")
+@ConfigurationProperties("spring.datasource.secondary")
+public DataSource secondaryDataSource() {
+	return DataSourceBuilder.create().type(HikariDataSource.class).build();
+}
+```
+
 生成entity.     JPA参考配置：https://blog.csdn.net/lwladzhj/article/details/81671598
 
 ```xml
@@ -108,8 +124,6 @@ public interface UserDao extends Repository<AccountInfo, Long> {
 }
 ```
 
-
-
 ##### 关键字处理，解析生产SQL
 
 ```
@@ -130,5 +144,42 @@ Not --- 等价于 SQL 中的 "！ ="，比如 findByUsernameNot(String user)；
 In --- 等价于 SQL 中的 "in"，比如 findByUsernameIn(Collection<String> userList) ，方法的参数可以是 Collection 类型，也可以是数组或者不定长参数；
 NotIn --- 等价于 SQL 中的 "not in"，比如 findByUsernameNotIn(Collection<String> userList) ，方法的参数可以是 Collection 类型，也可以是数组或者不定长参数；
 
+```
+
+##### 自定义启动类【HIbernate】
+
+```java
+@Id
+@GeneratedValue(generator="increment")
+@GenericGenerator(name="increment", strategy = "increment")
+public Long getId() {
+    return id;
+}
+
+@Temporal(TemporalType.TIMESTAMP)
+@Column(name = "EVENT_DATE")
+public Date getDate() {
+    return date;
+}
+
+// A SessionFactory is set up once for an application!
+final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
+	.configure() // configures settings from hibernate.cfg.xml
+	.build();
+try {
+	sessionFactory = new MetadataSources( registry ).buildMetadata().buildSessionFactory();
+}
+catch (Exception e) {
+	StandardServiceRegistryBuilder.destroy(registry );
+}
+// 执行Hql 语言
+session = sessionFactory.openSession();
+session.beginTransaction();
+List result = session.createQuery( "from Event" ).list();
+for ( Event event : (List<Event>) result ) {
+    System.out.println( "Event (" + event.getDate() + ") : " + event.getTitle() );
+}
+session.getTransaction().commit();
+session.close();
 ```
 
