@@ -4,6 +4,28 @@
 
 
 
+
+
+```
+netflix ribbon:
+参考：
+	https://www.ctolib.com/topics-129126.html
+	https://blog.csdn.net/mytobaby00/article/details/79837382
+
+netflix feign:
+参考：https://www.jianshu.com/p/3d597e9d2d67/
+openfeign:
+jax-rs 参考：https://blog.csdn.net/chengqiuming/article/details/81140852
+参考：https://blog.csdn.net/MrSpirit/article/details/80347876
+
+只了解：
+Dropwizard 
+参考：https://segmentfault.com/a/1190000000359827
+
+```
+
+
+
 #### kaluos/Thiem  tian
 
 
