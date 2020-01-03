@@ -32,5 +32,9 @@ interval <= free_heap * ms_per_mb“
 其中 ms_per_mb 是一个可以设置的 JVM 参数：-XX:SoftRefLRUPolicyMSPerMB，结合公式很容易看明白，这个参数决定 FullGC 保留的 SoftReference 数量，参数值越大，GC 后保留的软引用对象就越多。
  
 有些博客在推荐 JVM 参数时，建议 -XX:SoftRefLRUPolicyMSPerMB 配置成 0 ，这样可以避免在 GC 后保留 SoftReference。是否这样就可以完全避免软引用回收的问题？
+
+配置
+-XX:SoftRefLRUPolicyMSPerMB=0
+理论上这样配置，会使得数据在GC时瞬间收回，我们通过以下代码实测发现在YGC的情况下，对象不会回收，直接FGC才会进行回收。如果不设置JVM参数，则FGC仍然可能不会回收。
 ```
 
