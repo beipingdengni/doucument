@@ -1,6 +1,37 @@
 ## Feign 配置使用
 
+#### 使用Ribbon或者Feigin的时候，是可以开启超时重试功能的
 
+```
+开启的配置如下（另外ribbon超时时间和断路器超时时间也需要配置）
+spring.cloud.loadbalancer.retry.enabled=true
+ribbon.ReadTimeout=90000
+ribbon.ConnectTimeout=10000
+
+#Hystrix超时时间（默认1000ms，单位：ms）
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds=95000
+// 配置hystrix默认线程池
+hystrix:
+  threadpool:
+    default:
+      coreSize: 50
+      maxQueueSize: 100
+      queueSizeRejectionThreshold: 100
+      
+# 同一实例最大重试次数，不包括首次调用
+ribbon.MaxAutoRetries=1
+# 重试其他实例的最大重试次数，不包括首次所选的server
+ribbon.MaxAutoRetriesNextServer= 2
+# 是否所有操作都进行重试
+ribbon.OkToRetryOnAllOperations=true
+
+
+当我们需要关闭重试功能的时候，是不是spring.cloud.loadbalancer.retry.enabled=false就可以了呢，并不是。
+需要把ribbon.OkToRetryOnAllOperations=false才行
+
+```
+
+#### 代码分解
 
 ```java
 spring-cloud-netflix-core 实现了大部分的feigin和ribbon接口，整合到spring里
@@ -147,7 +178,7 @@ AbstractLoadBalancerAwareClient 类
 LoadBalancerCommand类
 	Observable<Server> selectServer()
   	// 获取loadBalancerContext 来自： AbstractLoadBalancerAwareClient 继承的类 
-  	// 最终使用：RetryableFeignLoadBalancer  
+  	// 最终使用：·  
   	// 调用方法使用：LoadBalancerContext类
   	Server server = loadBalancerContext.getServerFromLoadBalancer(loadBalancerURI, loadBalancerKey)
 
@@ -181,8 +212,11 @@ AbstractLoadBalancerAwareClient.this.execute(requestForServer, requestConfig)
   		choose(String serviceId)
   				new RibbonLoadBalancerClient.RibbonServer(serviceId,                                                 							this.getLoadBalancer().chooseServer(serviceId));
   		
-			
 
+java.net.NoRouteToHostException: No route to host (Host unreachable)
+Request processing failed; nested exception is feign.RetryableException: No route to host (Host unreachable) 
+  
+  
 
 重试类：DefaultLoadBalancerRetryHandler
 重试配置参数：
