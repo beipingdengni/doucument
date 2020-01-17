@@ -1,5 +1,44 @@
 ## Feign 配置使用
 
+#### openfeign 会使用到的包
+
+> 版本：10.7.0
+>
+> io.github.openfeign, feign-core
+> io.github.openfeign, feign-hystrix
+> io.github.openfeign, feign-ribbon
+> io.github.openfeign, feign-jaxrs
+> io.github.openfeign, feign-okhttp
+> io.github.openfeign, feign-jackson
+> io.github.openfeign, feign-slf4j
+
+#### spring cloud 配合使用
+
+> 使用一下版本分析
+>
+> org.springframework.cloud,spring-cloud-netflix-core:1.4.5
+
+```
+启动注册配置类：FeignClientsRegistrar    关注方法：registerFeignClients
+		使用了启动导入：ImportBeanDefinitionRegistrar
+		使用类扫描：ClassPathScanningCandidateComponentProvider
+
+启动创建代理类：FeignClientFactoryBean 继承：FactoryBean<Object> 获取实例：getObject 
+
+ribbon关联引用：LoadBalancerFeignClient
+
+Hystrix使用实现类：HystrixTargeter
+		此方法：HystrixTargeter#target 最后还是使用了：ReflectiveFeign#newInstance 创建代理
+
+所有代理方法拦截器接口都实现：InvocationHandler    默认使用：FeignInvocationHandler
+		此处还使用了方法拦截器器：MethodHandler   默认使用：SynchronousMethodHandler
+
+ribbon服务重试使用：RequestSpecificRetryHandler   
+			默认实现：DefaultLoadBalancerRetryHandler
+```
+
+
+
 #### 使用Ribbon或者Feigin的时候，是可以开启超时重试功能的
 
 ```
@@ -258,7 +297,7 @@ public T executeWithLoadBalancer(final S request, final IClientConfig requestCon
 }
 
 protected LoadBalancerCommand<T> buildLoadBalancerCommand(final S request, final IClientConfig config) {
-  	// 获取重试类
+  	// 获取重试类【控制重试】
 		RequestSpecificRetryHandler handler = getRequestSpecificRetryHandler(request, config);
 		LoadBalancerCommand.Builder<T> builder = LoadBalancerCommand.<T>builder()
       	// this 是继承 AbstractLoadBalancerAwareClient

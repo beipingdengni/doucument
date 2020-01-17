@@ -1,5 +1,28 @@
 ###  文件配置
 
+spring boot 相关配置
+
+```
+
+eureka.instance.prefer-ip-address为true或者false
+// 注册eureka 显示名称
+eureka.instance.instance-id=
+		${spring.cloud.client.ipAddress}:${spring.application.name}:${server.port}
+		:@project.version@		
+
+默认如下：${spring.cloud.client.hostname}:${spring.application.name}
+		:${spring.application.instance_id:${server.port}}
+
+
+hystix配置
+hystrix.threadpool.default.coreSize: 50
+hystrix.threadpool.default.maxQueueSize: 100
+hystrix.threadpool.default.queueSizeRejectionThreshold: 100
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 60000
+```
+
+
+
 
 >
 > @ImportResource('classpath:spring-bean.xml')
@@ -7,7 +30,7 @@
 > 添加使用导入 spring.xml  等xml的配置入口文件
 >
 > @ConfigurationProperties 读取配置主文件中的文件
- 
+
  ``` java
  @ConfigurationProperties(prefix = "web.config")
 
@@ -17,7 +40,7 @@
         authorName: "菩提树下的杨过"
         authorBlogUrl: "http://yjmyzz.cnblogs.com/" 
 
-```
+ ```
 
 >
 >  导入文件 自定义配置文件
