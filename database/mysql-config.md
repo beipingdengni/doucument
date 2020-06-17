@@ -12,6 +12,8 @@ interactive_timeout=31536000  将过期时间修改为1年
 
 mysql 连接配置
 
+> mysql_jdbc jar 包中，可以找配置【com.mysql.cj.conf.PropertyKey】
+>
 > user 数据库用户名（用于连接数据库）
 >
 > password 用户密码（用于连接数据库）
@@ -30,5 +32,41 @@ mysql 连接配置
 >
 > socketTimeout socket操作（读写）超时，单位：毫秒。 0表示永不超时
 >
-> connectTimeout 和数据库服务器建立socket连接时的超时，单位：毫秒。 0表示永不超时
+> connectTimeout 和数据库服务器建立socket连接时的超时，单位：毫秒。 0表示永不超时、
+>
+> serverTimezone
+>
+> allowMultiQueries=true
+>
+> rewriteBatchedStatements 
+>
+> useServerPrepStmts  和 emulateUnsupportedPstmts  控制是否使用服务端预编译语句
+>
+> cachePrepStmts  参数就可以控制是否启用缓存【预编译语句】 [可以参考文档](https://www.cnblogs.com/micrari/p/7112781.html)
+>
+> prepStmtCacheSqlLimit   缓存【预编译语句-长度】
+>
+> prepStmtCacheSize   缓存【预编译语句-长度】
+>
+> useSSL
+
+
+
+```
+show full columns from table_name; // 查询表列名称
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
