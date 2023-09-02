@@ -9,7 +9,7 @@
 ```
 netflix ribbon:
 参考：
-	https://www.ctolib.com/topics-129126.html
+	https://blog.csdn.net/qq_41895733/article/details/117464837
 	https://blog.csdn.net/mytobaby00/article/details/79837382
 
 netflix feign:
