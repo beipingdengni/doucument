@@ -2,7 +2,21 @@
 
 ------
 
+```
+ssh-keygen -t rsa -C "your_email@example.com"
 
+输入生成路径，下生成文件名称：id_rsa_qq  默认都在~/.ssh/ 路径下
+
+ssh-add ~/.ssh/id_rsa_qq
+
+git remote set-url origin git地址
+# git remote set-url --add origin it@github.com:beipingdengni/doucument.git
+git remote add origin git地址
+或者
+git remote add 自定义远程名称 git地址
+
+
+```
 
 
 
