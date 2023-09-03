@@ -7,6 +7,7 @@ ssh-keygen -t rsa -C "your_email@example.com"
 
 输入生成路径，下生成文件名称：id_rsa_qq  默认都在~/.ssh/ 路径下
 
+# 本地电脑产生多个key，用于推送
 ssh-add ~/.ssh/id_rsa_qq
 
 git remote set-url origin git地址
