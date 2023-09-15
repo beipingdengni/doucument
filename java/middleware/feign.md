@@ -1,6 +1,22 @@
-## Feign 配置使用
+# Feign 配置使用
 
-#### openfeign 会使用到的包
+## spring boot 配置
+
+```yaml
+feign:
+  client:
+    config:
+      default:
+      	# 指定Feign客户端连接提供者的超时时限
+        connectTimeout: 5000
+        # 指定Feign客户端连接上提供者后，向提供者进行提交请求，从提交时刻开始，到接收到响应，这个时段的超时时限
+        readTimeout: 5000
+  # 开启Feign对Hystrix的支持
+  hystrix:
+    enabled: true
+```
+
+## openfeign 会使用到的包
 
 > 版本：10.7.0
 >
@@ -37,16 +53,13 @@ ribbon服务重试使用：RequestSpecificRetryHandler
 			默认实现：DefaultLoadBalancerRetryHandler
 ```
 
+# 基础配置（feigh、ribbon、hysteria）
 
-
-#### 使用Ribbon或者Feigin的时候，是可以开启超时重试功能的
+### 使用Ribbon或者Feigin的时候，是可以开启超时重试功能的
 
 ```
-开启的配置如下（另外ribbon超时时间和断路器超时时间也需要配置）
-spring.cloud.loadbalancer.retry.enabled=true
-ribbon.ReadTimeout=90000
-ribbon.ConnectTimeout=10000
-
+# 开启熔断
+feign.hystrix.enabled=true
 #Hystrix超时时间（默认1000ms，单位：ms）
 hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds=95000
 // 配置hystrix默认线程池
@@ -56,7 +69,12 @@ hystrix:
       coreSize: 50
       maxQueueSize: 100
       queueSizeRejectionThreshold: 100
-      
+
+开启的配置如下（另外ribbon超时时间和断路器超时时间也需要配置）
+spring.cloud.loadbalancer.retry.enabled=true
+
+ribbon.ReadTimeout=90000
+ribbon.ConnectTimeout=10000
 # 同一实例最大重试次数，不包括首次调用
 ribbon.MaxAutoRetries=1
 # 重试其他实例的最大重试次数，不包括首次所选的server
@@ -179,7 +197,7 @@ jar包：spring-cloud-netflix-core 实现类：LoadBalancerFeignClient
 
 ```
 
-#####  以下一套结合ribbon和spring一起使用
+#  以下一套结合ribbon和spring一起使用
 
 ```java
 jar包：spring-cloud-netflix-core 配置使用spring
