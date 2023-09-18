@@ -4,8 +4,6 @@
 
 https://www.h2database.com/html/features.html#auto_reconnect
 
-
-
 ## pom  xml
 
 ```xml
