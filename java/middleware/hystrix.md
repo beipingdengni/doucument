@@ -44,7 +44,7 @@ hystrix:
             timeoutInMilliseconds: 10000 #断路器超时时间，默认1000ms
 ```
 
-![image-20230915212209163](img/hystrix/image-20230915212209163.png)
+![image-20230915212209163](imgs/hystrix/image-20230915212209163.png)
 
 ## 缓存（WEB）
 
@@ -97,11 +97,11 @@ management:
 
 暴露的健康地址： http://localhost:8080/actuator/hystrix.stream
 
-<img src="./img/hystrix/image-20230915221705797.png" alt="image-20230915221705797" style="zoom:50%;" />
+<img src="./imgs/hystrix/image-20230915221705797.png" alt="image-20230915221705797" style="zoom:50%;" />
 
 ## 监控图介绍
 
-![在这里插入图片描述](./img/hystrix/hystrix-dashboard.png)
+![在这里插入图片描述](./imgs/hystrix/hystrix-dashboard.png)
 
 ## Turbine （聚合监控）
 
@@ -304,4 +304,4 @@ Observable<String> s = new CommandHelloWorld("Bob").observe(); //hot observable
 Observable<String> s = new CommandHelloWorld("Bob").toObservable(); //cold observable
 ```
 
-![image-20230915213100393](img/hystrix/image-20230915213100393.png)
+![image-20230915213100393](imgs/hystrix/image-20230915213100393.png)
