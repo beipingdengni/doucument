@@ -1,63 +1,57 @@
-![jiegoytu](../jpg/mysql_struct.jpg)
+![mysql_struct](imgs/mysql_struct.jpg)
 
-##
+
+
+
 
 ### 并发控制和锁的概念
+
 ```
 解决并发问题最有效的方案是引入了锁的机制，锁在功能上分为共享锁(shared lock)和排它锁(exclusive lock)即通常说的读锁和写锁。
 
 当一个select语句在执行时可以施加读锁，这样就可以允许其它的select操作进行，因为在这个过程中数据信息是不会被改变的这样就能够提高数据库的运行效率。当需要对数据更新时，就需要施加写锁了，不在允许其它的操作进行，以免产生数据的脏读和幻读。锁同样有粒度大小，有表级锁(table lock)和行级锁(row lock)，分别在数据操作的过程中完成行的锁定和表的锁定
 
 ```
- 默认MySQL中自动提交是开启的
-```
-    show variables like 'autocommit'
-
-    事务（ACID）特性
-
-    原子性(atomicity):事务中的所有操作要么全部提交成功，要么全部失败回滚。
-
-    一致性(consistency):数据库总是从一个一致性状态转换到另一个一致性状态。
-
-    隔离性(isolation):一个事务所做的修改在提交之前对其它事务是不可见的。
-
-    持久性(durability):一旦事务提交，其所做的修改便会永久保存在数据库中。
 
 
-    事务隔离级别：
+#### 事务（ACID）特性
 
-    READ UNCOMMITTED(读未提交)：事务中的修改即使未提交也是对其它事务可见
+1.  原子性(atomicity):事务中的所有操作要么全部提交成功，要么全部失败回滚。
+2. 一致性(consistency):数据库总是从一个一致性状态转换到另一个一致性状态。
+3. 隔离性(isolation):一个事务所做的修改在提交之前对其它事务是不可见的。
+4.  持久性(durability):一旦事务提交，其所做的修改便会永久保存在数据库中。
 
-    READ COMMITTED(读提交)：事务提交后所做的修改才会被另一个事务看见，可能产生一个事务中两次查询的结果不同。
+#### 事务隔离级别
 
-    REPEATABLE READ(可重读)：只有当前事务提交才能看见另一个事务的修改结果。解决了一个事务中两次查询的结果不同的问题。
+>  默认MySQL中自动提交是开启的
 
-    SERIALIZABLE(串行化)：只有一个事务提交之后才会执行另一个事务
+​    READ UNCOMMITTED(读未提交)：事务中的修改即使未提交也是对其它事务可见
+​    READ COMMITTED(读提交)：事务提交后所做的修改才会被另一个事务看见，可能产生一个事务中两次查询的结果不同。
+​    REPEATABLE READ(可重读)：只有当前事务提交才能看见另一个事务的修改结果。解决了一个事务中两次查询的结果不同的问题。
+​    SERIALIZABLE(串行化)：只有一个事务提交之后才会执行另一个事务
 
-    查询事务隔离级别：
+#### 事务基础操作
 
-    show variables like 'tx_isolation'
+##### 查看
 
-    临时修改隔离级别：
+show variables like 'autocommit'
 
-    set tx_isolation ='REDA-COMMITTED'
+查询事务隔离级别：show variables like 'tx_isolation'
 
-    start transaction;
-    select .....
-    update .....
-    insert .....
-    commit;
+临时修改、隔离级别：set tx_isolation ='REDA-COMMITTED'
 
 ```
-
-MYSQL 存储引擎
-
+set tx_isolation ='REDA-COMMITTED'
+start transaction;
+	select .....
+	update .....
+	insert .....
+commit;
 ```
-    show table status like 'user'\G
 
-```
+#### MYSQL 存储引擎
 
-存储引擎的介绍：
+##### 存储引擎的介绍：
 
 ```
 
@@ -81,23 +75,23 @@ MyISAM引擎：
     8.支持索引缓存不支持数据缓存。
 
 ```
-修改引擎方法  alter table ss engine = InnoDB
+>  查看表存储引擎：show table status like '表名称'  \G;
+>
+> 修改引擎方法:      alter table '表名称' engine = InnoDB
 
-EXPLAIN 解析 执行的SQL ：
-
-    explain select * from news
-查看数据库基本信息
+#### 查看数据库基本信息
 
     show variables like '%version%';
-日志设置：
+#### 日志设置查看：
 
     show variables like '%general%';
-日志设置 文件样式：
+#### 日志设置 文件样式：
 
     show variables like '%log_output%';  ##【table or file】
-设置环境系统
+#### 设置环境系统
+
 ```
-查询 show variables  like '%slow_query%'
+查询 show variables like '%slow_query%'
 开启 set global slow_query_log=1
 
 开启通用日志查询： set global general_log=on;
@@ -129,7 +123,6 @@ select * from mysql.general_log  [慢日志查询]
     -g 后面可以写正则表达式匹配，大小写不敏感
 
 ```
-
 
 
 

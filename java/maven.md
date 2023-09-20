@@ -54,3 +54,24 @@ mvn dependency:purge-local-repository -DgroupId=com.example -DartifactId=myapp -
 </repositories>
 ```
 
+# 基础操作
+
+
+
+
+
+## PMD、checkstyle
+
+
+
+### 忽略检查
+
+```shell
+mvn clean package \
+-Dpmd.skip=true\
+-Dcheckstyle.skip=true\
+-Dmaven.test.skip=true\
+-U -f pom.xml 
+-s ~/.m2/settings.xml
+```
+

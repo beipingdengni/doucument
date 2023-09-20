@@ -1,3 +1,5 @@
+
+
 ## Mysql 数据页
 
 #### 介绍
@@ -14,9 +16,11 @@
 
 #### 如图参考：
 
-![mysql-page-summery](../img/mysql-page-summery.png)
+![mysql-page-summery](/Users/tianbeiping1/Documents/study/doucument/database/mysql/imgs/mysql-page-summery.png)
 
-![mysql-page-row](../img/mysql-page-dic.png)
+![mysql-page-dic](imgs/mysql-page-dic.png)
+
+
 
 > 上图为 Page 数据结构
 
@@ -41,7 +45,7 @@ File Trailer[8字节]
 
 #### Innodb 存储引擎提供了两种格式的行记录：Compact 和 Redundant
 
-![mysql-page-row-cmpt](../img/mysql-page-row-cmpt.png)
+![mysql-page-row-cmpt](imgs/mysql-page-row-cmpt.png)
 
 ```
 1、变长字段长度列表：逆序记录每一个列的长度，如果列的长度小于 255 字节，则使用一个字节，否则使用 2 个字节。该字段的实际长度取决于列数和每一列的长度，因此是变长的。
