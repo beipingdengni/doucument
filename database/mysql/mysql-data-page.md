@@ -59,8 +59,6 @@ File Trailer[8字节]
 
 
 
-![mysql-page-row-rddt](../img/mysql-page-row-rddt.png)
-
 ```
 字段长度偏移列表：与 Compact 中的变长字段长度列表相同的是它们都是按照列的逆序顺序设置值的，不同的是字段长度偏移列表记录的是偏移量，每一次都需要加上上一次的偏移，同时对于 CHAR 的 NULL 值，会直接按照最大空间记录，而对于 VCHAR 的 NULL 值不占用任何存储空间。
 ```

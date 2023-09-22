@@ -1,4 +1,6 @@
-Mysql server 配置
+# 基础配置
+
+## Mysql server 配置
 
 ```
 1、修改my.cnf：
@@ -10,7 +12,7 @@ interactive_timeout=31536000  将过期时间修改为1年
 
 ```
 
-mysql 连接配置
+## mysql 连接配置
 
 > mysql_jdbc jar 包中，可以找配置【com.mysql.cj.conf.PropertyKey】
 >
@@ -50,13 +52,15 @@ mysql 连接配置
 >
 > useSSL
 
-
-
 ```
 show full columns from table_name; // 查询表列名称
 ```
 
+# java 连接
 
+# python 连接
+
+# golang 连接
 
 
 

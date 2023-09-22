@@ -1,8 +1,8 @@
+PropertyDescriptor
 
 
 
-
-
+## Gson
 
 ```
 
@@ -35,7 +35,7 @@ Gson gson=new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
 
 
-### 类实例化操作（无参构造、有参构造）
+# 类实例化操作（无参构造、有参构造）
 
 ```java
  private static Object newInstance(Class<?> cls) {

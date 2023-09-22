@@ -1,4 +1,6 @@
-![mysql_struct](imgs/mysql_struct.jpg)
+# 数据库结构
+
+![mysql_struct](/Users/tianbeiping1/Documents/study/doucument/database/mysql/imgs/mysql_struct.jpg)
 
 
 
@@ -12,6 +14,7 @@
 当一个select语句在执行时可以施加读锁，这样就可以允许其它的select操作进行，因为在这个过程中数据信息是不会被改变的这样就能够提高数据库的运行效率。当需要对数据更新时，就需要施加写锁了，不在允许其它的操作进行，以免产生数据的脏读和幻读。锁同样有粒度大小，有表级锁(table lock)和行级锁(row lock)，分别在数据操作的过程中完成行的锁定和表的锁定
 
 ```
+
 
 
 #### 事务（ACID）特性
@@ -54,7 +57,6 @@ commit;
 ##### 存储引擎的介绍：
 
 ```
-
 InnoDB 引擎：
     1、讲数据存储在表空间中，表空间由一系列的数据文件组成，由InnoDB 管理
     2、支持每个表的数据和索引存在单独的文件中(innodb_file_per_table)
@@ -75,54 +77,14 @@ MyISAM引擎：
     8.支持索引缓存不支持数据缓存。
 
 ```
+
 >  查看表存储引擎：show table status like '表名称'  \G;
 >
 > 修改引擎方法:      alter table '表名称' engine = InnoDB
 
-#### 查看数据库基本信息
-
-    show variables like '%version%';
-#### 日志设置查看：
-
-    show variables like '%general%';
-#### 日志设置 文件样式：
-
-    show variables like '%log_output%';  ##【table or file】
-#### 设置环境系统
+查看innodb状态
 
 ```
-查询 show variables like '%slow_query%'
-开启 set global slow_query_log=1
-
-开启通用日志查询： set global general_log=on;
-
-关闭通用日志查询： set globalgeneral_log=off;
-
-设置通用日志输出为表方式： set globallog_output=’TABLE’;
-
-设置通用日志输出为文件方式： set globallog_output=’FILE’;
-
-设置通用日志输出为表和文件方式：set global log_output=’FILE,TABLE’;
+SHOW ENGINE INNODB STATUS;
 ```
-#### 注意：上述命令只对当前生效，当MySQL重启失效，如果要永久生效，需要配置my.cnf）
-
-select * from mysql.general_log  [慢日志查询]
-
-是否开启慢查询：show variables like '%query%';
-
-查询当前慢查询的语句的个数: show global status like '%slow%';
-
-补充：
-```
-    perlmysqldumpslow –s c –t 10 slow-query.log
-
-    -s 表示按何种方式排序，c、t、l、r分别是按照记录次数、时间、查询时间、返回的记录数来排序，ac、at、al、ar，表示相应的倒叙；
-
-    -t 表示top的意思，后面跟着的数据表示返回前面多少条；
-
-    -g 后面可以写正则表达式匹配，大小写不敏感
-
-```
-
-
 
