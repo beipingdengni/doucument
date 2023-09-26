@@ -1,10 +1,25 @@
 ### http 中自定义验证
 
 
-## [hibernate 官方文档指导](http://hibernate.org/validator/documentation/getting-started/)
-## [官方api 详细指导](https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/#validator-gettingstarted-createmodel)
+##### [hibernate 官方文档指导](http://hibernate.org/validator/documentation/getting-started/)
+##### [官方api 详细指导](https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/#validator-gettingstarted-createmodel)
+
+
+
+时区
+
+```
+TimeZone timeZone = TimeZone.getTimeZone("GMT+8");
+
+SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+sdf.setTimeZone(timeZone);
+String formattedTime = sdf.format(currentTime);
+```
+
+
 
 #### 导入包
+
 ``` xml
  <dependency>  
         <groupId>javax.el</groupId>  
