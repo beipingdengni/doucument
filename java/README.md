@@ -13,3 +13,13 @@
 **[paidu-disconfig相关](./padu-disconfig.md)**
 
 **[java-excutore相关](./java-excutor.md)**
+
+
+
+
+
+kafka ui： https://github.com/provectus/kafka-ui?utm_source=gold_browser_extension
+
+checkstyle：https://github.com/checkstyle/checkstyle?utm_source=gold_browser_extension
+
+设计模式：https://github.com/iluwatar/java-design-patterns/tree/master/localization/zh

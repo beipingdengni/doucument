@@ -73,3 +73,66 @@ firewall-cmd --permanent --zone=internal --add-service=mysql
 firewall-cmd --reload
 ```
 
+
+
+## 使用案例
+
+### 开放端口
+
+```sh
+# 查看所有已开放的临时端口（默认为空）
+firewall-cmd --list-ports
+
+# 查看所有永久开放的端口（默认为空）
+firewall-cmd --list-ports --permanent
+
+# 添加临时开放端口（例如：比如我修改ssh远程连接端口是223，则需要开放这个端口）
+firewall-cmd --add-port=223/tcp
+
+# 添加永久开放的端口（例如：223端口）
+firewall-cmd --add-port=223/tcp --permanent
+
+# 关闭临时端口
+firewall-cmd --remove-port=80/tcp
+
+# 关闭永久端口、删除
+firewall-cmd --remove-port=80/tcp --permanent
+
+# 配置结束后需要输入重载命令并重启防火墙以生效配置
+firewall-cmd --reload
+
+systemctl restart firewalld
+```
+
+### 通过firewall-cmd 开放端口
+
+```sh
+# 作用域是public，开放tcp协议的80端口，一直有效
+firewall-cmd --zone=public --add-port=80/tcp --permanent
+
+# 作用域是public，批量开放tcp协议的80-90端口，一直有效
+firewall-cmd --zone=public --add-port=2000-6000/tcp --permanent
+
+# 作用域是public，批量开放tcp协议的80、90端口，一直有效
+firewall-cmd --zone=public --add-port=80/tcp  --add-port=90/tcp --permanent
+
+# 开放的服务是http协议，一直有效
+firewall-cmd --zone=public --add-service=http --permanent
+
+# 重新载入，更新防火墙规则，这样才生效。通过systemctl restart firewall 也可以达到
+firewall-cmd --reload
+
+# 查看tcp协议的80端口是否生效
+firewall-cmd --zone=public --query-port=80/tcp
+
+# 删除
+firewall-cmd --zone=public --remove-port=80/tcp --permanent
+
+firewall-cmd --list-services
+firewall-cmd --get-services
+firewall-cmd --add-service=<service>
+firewall-cmd --delete-service=<service>
+在每次修改端口和服务后/etc/firewalld/zones/public.xml文件就会被修改,所以也可以在文件中之间修改,然后重新加载
+使用命令实际也是在修改文件，需要重新加载才能生效。
+```
+

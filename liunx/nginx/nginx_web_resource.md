@@ -84,3 +84,35 @@ server {
 	}
 
 ```
+
+## 跨域处理
+
+```sh
+# proxy_pass末尾有/,请求地址：http://localhost/api/test,转发地址：http://127.0.0.1:8000/test
+upstream apiserver {
+	server 127.0.0.1:8090 weight=10 max_fails=2 fail_timeout=30s;
+	server 127.0.0.1:8091 weight=10 max_fails=2 fail_timeout=30s;
+}
+
+location /api/ {
+  add_header Access-Control-Allow-Origin $http_origin; # 指出允许的跨域
+  add_header Access-Control-Allow-Credentials 'true'; # 很重要
+  add_header Access-Control-Allow-Methods 'GET, POST, OPTIONS';
+  add_header Access-Control-Allow-Headers 'DNT,Authorization,Accept,Origin,Keep-Alive,User-Agent,X-Mx-ReqToken,X-Data-Type,X-Auth-Token,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range';
+  add_header 'Access-Control-Expose-Headers' 'Content-Length,Content-Range';
+  
+  if ($request_method = 'OPTIONS') { 
+    add_header Access-Control-Max-Age 1728000;
+    add_header Content-Type 'text/plain; charset=utf-8';
+    add_header Content-Length 0;
+    return 200;
+	}
+  proxy_pass http://apiserver/; 
+  proxy_set_header Host $host;
+  proxy_set_header X-Real-IP $remote_addr;
+  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header X-Forwarded-Proto $scheme;
+  proxy_connect_timeout 5;
+}
+```
+

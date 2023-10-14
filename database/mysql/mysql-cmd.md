@@ -14,6 +14,30 @@ mysql -h localhost -P3306 -uroot -p123456
 mysql -uroot -p123456 -D cs_event < ./test.sql
 ```
 
+### 数据库备份
+
+#### 数据导出
+
+> mysqldump -u <用户名> -p<密码> <数据库名> > <输出文件路径> 
+
+使用案例
+
+```
+mysqldump -h 127.0.0.1 -P3306 -u root -p123456 demo > /tmp/demo.sql
+
+mysqldump -uroot -p123456 -F -B it --default-character-set=utf8 --single-transaction -e | gzip > /root/mysql_back_`date +%F`.sql.gz
+
+
+出现告警：If you don't want to restore GTIDs, pass --set-gtid-purged=OFF. To make a complete dump, pass --all-databases --triggers --routines --events
+脚本中加入 --set-gtid-purged=off 或者–gtid-mode=OFF
+```
+
+
+
+
+
+#### 数据导入
+
 
 
 ### 导出到文件
