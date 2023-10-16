@@ -1,6 +1,33 @@
 ## Spring-AOP
 
-#### 开启aop 
+### 使用
+
+```java
+// 第一种
+@Pointcut("execution(* com.tbp.base.web.controller.*Controller.*(..))")
+public void interceptController() {}
+
+@Around("interceptController()")
+public Object handle(ProceedingJoinPoint joinPoint) throws Throwable {
+ Object[] args = joinPoint.getArgs();
+ return joinPoint.proceed(args);
+}
+
+// 第二种
+@Around("execution (* com.tbp.boot.facade..*(..))")
+public Object recordTime(ProceedingJoinPoint joinPoint) {
+  Object[] args = joinPoint.getArgs();
+  return joinPoint.proceed(args);
+}
+```
+
+
+
+
+
+
+
+### 开启aop 
 
 参考博客：https://www.cnblogs.com/liuyk-code/p/9886033.html
 
