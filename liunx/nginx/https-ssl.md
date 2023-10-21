@@ -11,6 +11,17 @@ vim /etc/nginx/nginx.conf
 变成配置内容如下：
 
 http{
+  
+  	# 开启gzip压缩
+    gzip on;
+    gzip_min_length 10k;
+    gzip_buffers 4 16k;
+    #gzip_http_version 1.0;
+    gzip_comp_level 2;
+    gzip_types text/plain application/x-javascript text/css application/xml text/javascript image/jpeg image/gif image/png image/jpg;
+    gzip_vary off;
+    gzip_disable "MSIE [1-6]\.";
+  
     #http节点中可以添加多个server节点
     server{
         #监听443端口

@@ -1,4 +1,4 @@
-分组、人员
+# 分组、人员
 
 ```shell
 # 创建分组
@@ -21,5 +21,14 @@ su admin
 
 # 切换root权限
 sudo -s
-
 ```
+
+# 文件分组
+
+chgrp [-R] [新组] [文件]    #chgrp group1 myfile.txt
+
+>  `-R` 为可选参数，表示递归修改指定目录下所有文件的所属组
+
+
+
+chgrp [分组:用户] [文件]    #chown group1:user1 myfile.txt
