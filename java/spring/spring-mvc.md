@@ -10,19 +10,15 @@
 
 ### 接口方法
 
-| 方法                                                         | 描述                                               |
-| ------------------------------------------------------------ | -------------------------------------------------- |
-| boolean isPattern(String path)                               | 判断路径是否是模式                                 |
-| boolean match(String pattern, String  path)                  | 判断路径是否完全匹配                               |
-| boolean matchStart(String pattern, String  path)             | 判断路径是否前缀匹配                               |
-| 前缀匹配的意思：路径能与模式的前面部分匹配，但模式可能还有后面多余部分 |                                                    |
-| 例如：/test能前缀匹配/test/{id}（但模式还有多余的/{id}部分未匹配） |                                                    |
-| String extractPathWithinPattern(String  pattern, String path) | 得到模式匹配的部分值                               |
-| 该方法只返回路径的实际模式匹配部分                           |                                                    |
-| 例如：myroot/*.html  匹配 myroot/myfile.html 路径，结果为 myfile.html |                                                    |
-| Map<String, String>  extractUriTemplateVariables(String pattern, String path) | 提取路径中的路径参数值                             |
-| Comparator<String>  getPatternComparator(String path)        | 得到一个排序比较器，用于对匹配到的所有路径进行排序 |
-| String combine(String pattern1, String  pattern2)            | 合并两个模式                                       |
+| 方法                                                         | 描述                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| boolean isPattern(String path)                               | 判断路径是否是模式                                           |
+| boolean match(String pattern, String  path)                  | 判断路径是否完全匹配                                         |
+| boolean matchStart(String pattern, String  path)             | 判断路径是否前缀匹配<br/>前缀匹配的意思：路径能与模式的前面部分匹配，但模式可能还有后面多余部分<br/>例如：/test能前缀匹配/test/{id}（但模式还有多余的/{id}部分未匹配） |
+| String extractPathWithinPattern(String  pattern, String path) | 得到模式匹配的部分值<br/>该方法只返回路径的实际模式匹配部分<br/>例如：myroot/*.html  匹配 myroot/myfile.html 路径，结果为 myfile.html |
+| Map<String, String>  extractUriTemplateVariables(String pattern, String path) | 提取路径中的路径参数值                                       |
+| Comparator<String>  getPatternComparator(String path)        | 得到一个排序比较器，用于对匹配到的所有路径进行排序           |
+| String combine(String pattern1, String  pattern2)            | 合并两个模式                                                 |
 
 
 
