@@ -1,6 +1,16 @@
 # Python
 
-pip、conda 包管理
+```python
+# 创建虚拟环境
+python3 -m venv .
+
+# 进入虚拟环境
+source bin/activate
+
+python -m pip install -r requirements.txt
+```
+
+# pip、conda 包管理
 
 ## 临时换源：临时换源只需要在[pip安装](https://so.csdn.net/so/search?q=pip安装&spm=1001.2101.3001.7020)包时，加上一个-i参数后接源的url即可
 

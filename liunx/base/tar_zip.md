@@ -21,6 +21,8 @@ tar -zxvf elasticsearch-6.2.3.tar.gz -C /usr/local
 
 #### zip [选项] <压缩文件名> <文件/目录列表>
 
+> zip -r 压缩包名 待压缩的文件和目录列表
+
 ```
 选项	作用
 -r	递归地将一个目录及其所有子目录和文件压缩到ZIP文件中
