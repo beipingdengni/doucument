@@ -34,7 +34,7 @@
 >
 > 通过反射操作
 >
-> ```
+> ```java
 > Field field = classConfig.getDeclaredField(fieldName);
 > field.setAccessible(true);
 > Map mapConfig = (Map) field.get(configuration);
@@ -43,7 +43,7 @@
 
 ##### 加载改变的文件
 
-```
+```java
 XMLMapperBuilder xmlMapperBuilder = new XMLMapperBuilder(configLocation.getInputStream(), configuration, configLocation.toString(), configuration.getSqlFragments());
 xmlMapperBuilder.parse();
 ```
@@ -54,27 +54,7 @@ xmlMapperBuilder.parse();
 
 ##### 参考代码如下: 
 
-```
-package com.ali.bt.tk.controller;
-
-import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.builder.xml.XMLMapperBuilder;
-import org.apache.ibatis.session.Configuration;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
+```java
 /**
  * describe:
  *

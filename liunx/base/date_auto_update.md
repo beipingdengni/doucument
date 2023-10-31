@@ -60,6 +60,8 @@ ntpdate time.windows.com
 
 ### 自动定时校正时间
 
+> 安装时间同步工具：  yum install ntpdate -y
+
 ```sh
 # 设定crontab计划任务自动校时：
 

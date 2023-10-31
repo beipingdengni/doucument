@@ -2,7 +2,7 @@
 
 ## jar使用
 
-```
+```xml
   <!-- MyBatis -->
   <dependency>
     <groupId>org.mybatis</groupId>
@@ -13,7 +13,7 @@
 
 
 
-```
+```java
 String resource = "mybatis-config.xml";
 // 加载MyBatis的主配置文件
 InputStream inputStream = Resources.getResourceAsStream(resource);
@@ -22,6 +22,13 @@ SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(inputStream)
 
 
 SqlSession  sqlSession= factory.openSession()
+```
+
+
+
+## mybatis-config.xml
+
+```
 
 ```
 

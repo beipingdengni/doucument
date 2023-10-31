@@ -4,7 +4,7 @@
 
 pom jar 包
 
-```
+```xml
 <dependency>
     <groupId>tk.mybatis</groupId>
     <artifactId>mapper</artifactId>
@@ -14,7 +14,7 @@ pom jar 包
 
 xml 配置
 
-```
+```xml
 <bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
 		<!-- 扫描的包位置 -->
     <property name="basePackage" value="tk.mybatis.mapper.mapper"/>
@@ -37,7 +37,7 @@ xml 配置
 
 > 参看博客：https://blog.csdn.net/lyf_ldh/article/details/80956556
 
-```
+```xml
 <!-- 代码生成器 -->
 <dependency>
   <groupId>tk.mybatis</groupId>
@@ -50,7 +50,7 @@ xml 配置
 
 使用自动生成代码：
 
-```
+```xml
 <!-- https://mvnrepository.com/artifact/org.mybatis.generator/mybatis-generator-core -->
 <dependency>
     <groupId>org.mybatis.generator</groupId>
@@ -76,7 +76,7 @@ xml 配置
 
 
 
-```
+```java
 public static void main(String[] args) throws Exception {
         List<String> warnings = new ArrayList<String>();
         boolean overwrite = true;
@@ -96,7 +96,7 @@ public static void main(String[] args) throws Exception {
 
 配置xml 【 generatorConfig.xml 】
 
-```
+```xml
 <!DOCTYPE generatorConfiguration
         PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">

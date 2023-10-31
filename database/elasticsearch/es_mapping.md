@@ -1,6 +1,49 @@
 
 
+## 添加字段
 
+```sh
+PUT my-index-000001
+{
+  "mappings": {
+  	"_source": { "mode": "synthetic" },
+  	
+    "properties": {
+      "date": {
+        "type":   "date",
+        "format": "yyyy-MM-ddTHH:mm:ssZ||yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis"
+      },
+      "date_nanos": {
+        "type":   "date_nanos"   #2015-01-01T12:10:30.000Z
+      }
+    }
+  }
+}
+```
+
+### 添加field字段
+
+```sh
+PUT /my-index/_mapping
+{
+  "properties": {
+    "email": {
+      "type": "keyword"
+    }
+  }
+}
+```
+
+### 更新setting
+
+```sh
+PUT /my-index-000001/_settings
+{
+  "index" : {
+    "number_of_replicas" : 2
+  }
+}
+```
 
 
 
@@ -25,8 +68,6 @@ curl -X PUT -H "Content-Type:application/json" -d @index_mapping_source.json "ht
     }
 }
 ```
-
-
 
 ## 参考创建
 

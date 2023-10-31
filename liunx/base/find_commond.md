@@ -17,3 +17,18 @@
 | *-exec …… {}\;        | 后面可跟用于进一步处理搜索结果的命令 -ok -print              |
 | -mindepth n           | 从第 n级目录开始搜索 eg: /etc 的第三级子目录开始搜索。 find /etc -mindepth 3 |
 | -maxdepth n           | 表示至多搜索到第 n-1 级子目录。0当前目录                     |
+
+使用案例
+
+```shell
+# 查找压缩
+find / -name *.jpg -type f -print | xargs tar -cvzf images.tar.gz
+
+# 保留三天日志
+find /export/Logs/* -name "*.log" -mtime +3 | xargs rm -rf
+
+# 复制文件，文件到一个外部的硬盘驱动
+ls *.jpg | xargs -n1 -i cp {} /external-hard-drive/directory
+
+```
+
