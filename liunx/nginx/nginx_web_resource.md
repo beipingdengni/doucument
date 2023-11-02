@@ -45,7 +45,7 @@ server {    
 　　　　　　　 add_header 'Access-Control-Expose-Headers' '*'; #此处设置客户端可以获取到的 服务端自定义header名称
         } 
         # proxy_set_header area-code 'CWHT'; #设置固定自定义header参数，不由客户端传递
-        proxy_pass https://wxapp.jktv.tv/;
+        proxy_pass https://localhost:9090/;
     }
 }
 ```
@@ -107,12 +107,13 @@ location /api/ {
     add_header Content-Length 0;
     return 200;
 	}
-  proxy_pass http://apiserver/; 
   proxy_set_header Host $host;
   proxy_set_header X-Real-IP $remote_addr;
   proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
   proxy_set_header X-Forwarded-Proto $scheme;
   proxy_connect_timeout 5;
+  
+  proxy_pass http://apiserver/; 
 }
 ```
 
