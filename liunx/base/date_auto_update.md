@@ -56,6 +56,8 @@ source ~/.bashrc
 ```sh
 ntpdate time.nist.gov
 ntpdate time.windows.com
+
+*/20 * * * * ntpdate ntp.jcloudcs.com > /dev/null 2>&1  
 ```
 
 ### 自动定时校正时间

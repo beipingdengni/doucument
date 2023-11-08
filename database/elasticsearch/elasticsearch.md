@@ -14,9 +14,39 @@ githup中文文档地址：https://github.com/elasticsearch-cn/elasticsearch-def
 proxy_set_header Authorization "Basic xxxxxxx"; // echo -n 'user:password' | base64
 ```
 
+## ES优化
+
+### 将terms修改为should 使用
+
+https://blog.csdn.net/hellozhxy/article/details/132065874
+
+```json
+# 优化前
+{
+  "query": {
+    "bool": {
+      "filter": [{"terms": {"f_status": [1,2]}}]
+    }
+  }
+}
+
+# 优化后
+{
+  "query": {
+    "bool": {
+      "filter": [{
+          "bool": {
+            "should": [{"term": {"f_status": 1}},{"term": {"f_status": 2}}],
+            "minimum_should_match": "1"
+          }}]
+    }
+  }
+}
+```
 
 
-## ES优化分段
+
+## ES优化分段合并
 
 指导文档： https://zhuanlan.zhihu.com/p/647279604
 
