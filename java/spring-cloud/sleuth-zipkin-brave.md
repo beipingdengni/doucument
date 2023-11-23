@@ -84,6 +84,8 @@
 ## 参考博客
 
 ```
+brave使用： https://www.freesion.com/article/8770637784/
+
 https://codeleading.com/article/12572317349/
 ```
 
@@ -380,6 +382,125 @@ ExecutorService proxiedService = tracing.currentTraceContext().executorService(s
 
 ```
 
+### 基础使用
+
+#### 单向跟踪
+
+有时你需要创建一个异步操作，有Request，但是没有Response.在通常的RPC tracing中，使用`span.finish()`表明接受到Response。在单向tracing中，使用`span.flush()`，因为你不期望响应。
+
+```java
+// 请求类: request
+// start a new span representing a client request
+oneWaySend = tracer.newSpan(parent).kind(Span.Kind.CLIENT);
+
+// Add the trace context to the request, so it can be propagated in-band
+tracing.propagation().injector(Request::addHeader)
+                     .inject(oneWaySend.context(), request);
+
+// 执行请求
+request.execute();
+
+// start the client side and flush instead of finish
+oneWaySend.start().flush();
+```
+
+#### server处理单向跟踪
+
+```java
+// pull the context out of the incoming request
+extractor = tracing.propagation().extractor(Request::getHeader);
+
+// convert that context to a span which you can name and add tags to
+oneWayReceive = nextSpan(tracer, extractor.extract(request))
+    .name("process-request")
+    .kind(SERVER)
+    ... add tags etc.
+
+// start the server side and flush instead of finish
+oneWayReceive.start().flush();
+
+// you should not modify this span anymore as it is complete. However,
+// you can create children to represent follow-up work.
+next = tracer.newSpan(oneWayReceive.context()).name("step2").start();
+```
+
+### 采样
+
+#### 声明式采样
+
+```java
+// derives a sample rate from an annotation on a java method
+DeclarativeSampler<Traced> sampler = DeclarativeSampler.create(Traced::sampleRate);
+
+// java aop
+@Around("@annotation(traced)")
+public Object traceThing(ProceedingJoinPoint pjp, Traced traced) throws Throwable {
+  Span span = tracing.tracer().newTrace(sampler.sample(traced))...
+  try {
+    return pjp.proceed();
+  } finally {
+    span.finish();
+  }
+}
+```
+
+#### 自定义采样
+
+```java
+// tracing.tracer().newTrace(sampler.sample(traced))
+Span newTrace(Request input) {
+  SamplingFlags flags = SamplingFlags.NONE;
+  if (input.url().startsWith("/experimental")) {
+    flags = SamplingFlags.SAMPLED;
+  } else if (input.url().startsWith("/static")) {
+    flags = SamplingFlags.NOT_SAMPLED;
+  }
+  return tracer.newTrace(flags);
+}
+```
+
+### B3 Propagation 传递、
+
+#### 客户端
+
+```java
+// configure a function that injects a trace context into a request
+injector = tracing.propagation().injector(Request.Builder::addHeader);
+
+// before a request is sent, add the current span's context to it
+injector.inject(span.context(), request);
+```
+
+#### 服务端
+
+```java
+// configure a function that extracts the trace context from a request
+extracted = tracing.propagation().extractor(Request::getHeader);
+
+// when a server receives a request, it joins or starts a new trace
+span = tracer.nextSpan(extracted, request);
+```
+
+#### 传播额外的字段
+
+```java
+// when you initialize the builder, define the extra field you want to propagate
+tracingBuilder.propagationFactory(
+  ExtraFieldPropagation.newFactory(B3Propagation.FACTORY, "x-vcap-request-id")
+);
+
+// later, you can tag that request ID or use it in log correlation
+requestId = ExtraFieldPropagation.current("x-vcap-request-id");
+```
+
+#### 提取PROPAGATED的上下文
+
+```
+TraceContext.Extractor<C> 从传入请求或消息中读取跟踪标识符和采样状态。carrier通常是一个请求对象或头信息（headers）。
+上面方式可以用于像HttpServletHandler这样的标准工具，也可用于自定义RPC或消息传递代码。
+TraceContextOrSamplingFlags通常只用于Tracer.nextSpan(extracted),除非你在客户端和服务端之间共享spanID。
+```
+
 ### span内容
 
 ```json
@@ -424,6 +545,22 @@ ExecutorService proxiedService = tracing.currentTraceContext().executorService(s
     }
   ]
 }
+
+```
+
+### 单元测试
+
+```java
+ConcurrentLinkedDeque<Span> spans = new ConcurrentLinkedDeque<>();
+
+Tracing tracing = Tracing.newBuilder()
+  .currentTraceContext(new StrictCurrentTraceContext())
+  .spanReporter(span -> spans.add(span))
+  .build();
+
+
+Tracing current = Tracing.current();
+if (current != null) current.close();
 
 ```
 

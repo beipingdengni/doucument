@@ -1,5 +1,48 @@
 
 
+## 参考字段
+
+```json
+// 日期格式如下：
+{
+  "date": {
+    "type":   "date",
+    "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis"
+  }
+}
+//  ES的复杂类型有3个，Array、object、nested
+// 内嵌对象数组
+{
+    "my_index": {
+        "mappings": {
+            "_doc": {
+                "properties": {
+                    "lists": {
+                        //"type": "nested", //独立存储
+                        "properties": {
+                            "description": {
+                                "type": "keyword"
+                            },
+                            "name": {
+                                "type": "keyword"
+                            }
+                        }
+                    },
+                    "message": {
+                        "type": "keyword"
+                    },
+                    "tags": {    // 数组
+                        "type": "keyword"
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+
+
 ## 添加字段
 
 ```sh
