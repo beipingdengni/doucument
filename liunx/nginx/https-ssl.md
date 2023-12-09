@@ -26,13 +26,13 @@ http{
     server{
         #监听443端口
         listen 443;
-        #对应的域名，把baofeidyz.com改成你们自己的域名就可以了
-        server_name baofeidyz.com;
+        #对应的域名，beipingdengni.com改成你们自己的域名就可以了
+        server_name beipingdengni.com;
         ssl on;
-        #从腾讯云获取到的第一个文件的全路径
-        ssl_certificate /etc/ssl/1_baofeidyz.com_bundle.crt;
-        #从腾讯云获取到的第二个文件的全路径
-        ssl_certificate_key /etc/ssl/2_baofeidyz.com.key;
+        #从腾讯云获取到的第一个文件的全路径（签名证书）
+        ssl_certificate /etc/ssl/beipingdengni.com.crt;
+        #从腾讯云获取到的第二个文件的全路径（私有key）
+        ssl_certificate_key /etc/ssl/beipingdengni.com.key;
         ssl_session_timeout 5m;
         ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
         ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:HIGH:!aNULL:!MD5:!RC4:!DHE;
@@ -47,8 +47,8 @@ http{
     }
     server{
         listen 80;
-        server_name baofeidyz.com;
-        rewrite ^/(.*)$ https://baofeidyz.com:443/$1 permanent;
+        server_name beipingdengni.com;
+        rewrite ^/(.*)$ https://beipingdengni.com:443/$1 permanent;
     }
 }
 
@@ -56,25 +56,41 @@ http{
 
 
 
-#### 自己生存安全证书
+### 参考博客(自签名证书)：
+
+https://blog.csdn.net/m0_52440465/article/details/130713591
+
+自签名流程
+
+<img src="imgs/https-ssl/image-20231128213353619.png" alt="image-20231128213353619" style="zoom:50%;" />
+
+
+
+图片备注说明： 
+
+ca.pem 证书私有key，ca.csr证书公有key，ca.crt根证书；
+
+server.pem 服务私有key，server.csr服务公有key，server.crt服务签名证书；
+
+
+
+#### 自签名安全证书，操作步骤
 
 ##### 第一种
 
-```
+```sh
 使用 openssl
 
 第一步，为服务器端和客户端准备公钥、私钥
 
 # 生成服务器端私钥
 openssl genrsa -out server.key 1024
+# openssl genpkey -algorithm RSA -out server.pem -pkeyopt rsa_keygen_bits:2048
 # 生成服务器端公钥
 openssl rsa -in server.key -pubout -out server.pem
 
-# 生成客户端私钥
-openssl genrsa -out client.key 1024
-# 生成客户端公钥
-openssl rsa -in client.key -pubout -out client.pem
 =============================================================================
+
 第二步，生成 CA 证书
 # 生成 CA 私钥
 openssl genrsa -out ca.key 1024
@@ -87,21 +103,21 @@ openssl x509 -req -in ca.csr -signkey ca.key -out ca.crt
 第三步，生成服务器端证书和客户端证书
 # 服务器端需要向 CA 机构申请签名证书，在申请签名证书之前依然是创建自己的 CSR 文件
 openssl req -new -key server.key -out server.csr
+# 把信息带入到福建信息中
+# openssl req -new -key server.pem -out server.csr -subj "/C=CN/ST=Beijing/L=Beijing/O=local/OU=local/CN=localhost" -addext "subjectAltName = DNS:localhost,IP:127.0.0.1,IP:127.0.0.2"
 # 向自己的 CA 机构申请证书，签名过程需要 CA 的证书和私钥参与，最终颁发一个带有 CA 签名的证书
 openssl x509 -req -CA ca.crt -CAkey ca.key -CAcreateserial -in server.csr -out server.crt
 =============================================================================
- 
-# client 端
-openssl req -new -key client.key -out client.csr
-# client 端到 CA 签名
-openssl x509 -req -CA ca.crt -CAkey ca.key -CAcreateserial -in client.csr -out client.crt
-=============================================================================
 
 生成文件如下
-CA证书：			ca.crt     ca.csr     ca.key     ca.srl     
-客户端证书：	client.crt client.csr client.key client.pem 
+CA证书：			ca.crt     ca.csr     ca.key     ca.srl
 服务器端证书：server.crt server.csr server.key server.pem
+
+ngix 配置：server.key、server.crt
+浏览器配置：ca.crt
 ```
+
+
 
 
 
