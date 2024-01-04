@@ -32,6 +32,23 @@ get /testcopy/_search
 
 ```
 
+### match_phrase_prefix
+
+```js
+// match_phrase_prefix
+GET tehero_index/_doc/_search
+{
+  "query": {
+    "match_phrase_prefix": {
+      "content": {
+        "query": "系",
+				"analyzer": "ik_smart"
+      }
+    }
+  }
+}
+```
+
 ### multi_match
 
 ```js
@@ -47,6 +64,16 @@ get /testcross/_search
   }
 }
 // 如果 provice， city 及area 每个词的权重不同， 比如 想要把city权重放的更高点，让权重优先的更考前的返回，我们可以直接在fields中计入 权重计算, 可以看到 city 被我改成了 city ^ 2 就是权重扩大 2倍，默认都是1倍
+
+GET /_search
+{
+  "query": {
+    "multi_match" : {
+      "query":    "this is a test", 
+      "fields": [ "subject", "message" ] 
+    }
+  }
+}
 ```
 
 ### Rescore重积分
@@ -89,6 +116,36 @@ get /testcopy/_search
          "rescore_query_weight" : 1
       }
    }
+}
+```
+
+## wildcard模糊查询
+
+```js
+// 查询
+GET /_search
+{
+  "query": {
+    "wildcard" : {
+      "content": "*test*",
+    }
+  }
+}
+
+// 查询
+GET /_search
+{
+  "query": {
+    "boo1": {
+      "must": {
+        "wildcard": {
+          "problem": {
+            "wildcard": "*测试*"
+          }
+        }
+      }
+    }
+  }
 }
 ```
 

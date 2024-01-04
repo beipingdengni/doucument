@@ -92,7 +92,7 @@ http {
 ## Nginx.conf
 
 ```perl
-user                                    admin  admin;
+user                                    admin  admin; # 启动的用户
 worker_processes                        8;
 #worker_cpu_affinity                     00000001 00000010 00000100 00001000 00010000 00100000 01000000 10000000;
 error_log                               /export/servers/nginx/logs/nginx_error.log  warn;
@@ -117,20 +117,20 @@ http
         server_names_hash_bucket_size   128;
         client_header_buffer_size       32k;
         large_client_header_buffers     4 32k;
-        client_max_body_size            300m;
+        client_max_body_size            300m;	#运行上传和传递的数据大小
         sendfile                        on;
         tcp_nopush                      on;
-        keepalive_timeout               0;
+        keepalive_timeout               0;		#不超时，保持
         tcp_nodelay                     on;
         client_body_buffer_size         512k;
         fastcgi_intercept_errors        on;
-        proxy_connect_timeout           90;
-        proxy_read_timeout              180;
-        proxy_send_timeout              180;
-        proxy_buffer_size               256k;
-        proxy_buffers                   4 256k;
-        proxy_busy_buffers_size         256k;
-        proxy_temp_file_write_size      256k;
+        proxy_connect_timeout           90;		# 连接服务超时
+        proxy_read_timeout              180;	# 读取服务接口超时
+        proxy_send_timeout              180;  # 发送到服务接口超时
+        proxy_buffer_size               256k;   #代理返回内容，超过会写完临时文件
+        proxy_buffers                   4 256k; #代理返回内容
+        proxy_busy_buffers_size         256k;   
+        #proxy_temp_file_write_size      256k;		#代理返回内容
         proxy_intercept_errors          on;
         server_name_in_redirect         off;
         proxy_hide_header               X-Powered-By;

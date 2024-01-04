@@ -1,5 +1,9 @@
 ## 安装webpack、webpack-cli、webpack-dev-server
 
+[参考学习博客链接地址](https://mp.weixin.qq.com/s?__biz=MjM5MDA2MTI1MA==&mid=2649140431&idx=1&sn=d9ba7757f54fa1f98375abc70b4df6de&chksm=be588b62892f0274f3088df57c1bcf868c071522d5a47bc97b8de27f0dc7b5cad89774e93982&scene=27)
+
+
+
 ```shell
 npm i webpack-cli -g
 
@@ -153,6 +157,8 @@ module.exports = {
 
 
 ## 依赖插件
+
+[自定义插件地址](https://zhuanlan.zhihu.com/p/661670534)
 
 ### new HtmlWebpackPlugin
 

@@ -191,9 +191,9 @@ ReactDOM.render(
 
 
 
-## 使用CDN加载实现react
+## 使用CDN加载实现react（完成代码）
 
-```html
+```jsx
 <!DOCTYPE html>
 <html>
   <head>

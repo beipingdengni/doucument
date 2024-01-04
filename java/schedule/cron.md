@@ -8,6 +8,49 @@
 </dependency>
 ```
 
+### spring cron
+
+```java
+// 可以使用redis或数据库来实现
+SimpleTriggerContext simpleTriggerContext = new SimpleTriggerContext(); // TriggerContext
+
+// 创建cron表达式计算
+CronTrigger cronTrigger = new CronTrigger("*/5 * * * * ?");
+
+// 获取下一次执行的时间
+Date date = cronTrigger.nextExecutionTime(simpleTriggerContext);
+
+// 注解处理
+// org.springframework.scheduling.annotation.ScheduledAnnotationBeanPostProcessor#processScheduled
+// org.springframework.scheduling.config.ScheduledTaskRegistrar#scheduleCronTask // 增加cron
+
+// 这个注册循环调用
+// Runnable task
+// new ReschedulingRunnable(task, trigger, this.clock, this.scheduledExecutor, errorHandler).schedule();
+```
+
+### quartz cron
+
+```java
+org.quartz.CronExpression
+org.quartz.CronTrigger
+  org.quartz.impl.triggers.CronTriggerImpl
+
+// 间隔五分钟就处理
+CronTriggerImpl cronTriggerImpl = new CronTriggerImpl("cron的名字","group任务所在分组","0 */ * * * ?");
+// 下次执行时间
+Date nextDate = cronTriggerImpl.getNextFireTime(); 
+
+// job任务：jobClass 需要继承接口：org.quartz.Job
+JobDetailImpl jobDetailImpl =new JobDetailImpl("job的名字","job的group任务所在分组",jobClass)
+
+// org.quartz.JobBuilder
+// org.quartz.TriggerBuilder
+  // org.quartz.CronScheduleBuilder
+```
+
+
+
 ### Cron表达式举例
 
 ```properties
