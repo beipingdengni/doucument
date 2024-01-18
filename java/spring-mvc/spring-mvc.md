@@ -30,7 +30,7 @@
                allowed-methods="GET,POST,OPTIONS"
                allowed-headers="Authorization,Accept,Origin,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range"
                max-age="3600"
-               allowed-origins="http://ge-work.jd.com,https://ge-work.jd.com,http://jdbxsaas-test.jd.com,http://demo.jr.jd.com"
+               allowed-origins="http://ge-work.jd.com"
                allow-credentials="true"/>
 </mvc:cors>
 ```
