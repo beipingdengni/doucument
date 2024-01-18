@@ -1,3 +1,5 @@
+[高手文档](https://xiaoxiami.gitbook.io/elasticsearch/)
+
 ### match
 
 ```js
@@ -12,6 +14,20 @@ get /testcopy/_search
     }
   }
 }
+
+// 高亮命中词语
+curl -XPOST http://localhost:9200/index/_search  -H 'Content-Type:application/json' -d'
+{
+    "query" : { "match" : { "content" : "中国" }},
+    "highlight" : {
+        "pre_tags" : ["<tag1>", "<tag2>"],
+        "post_tags" : ["</tag1>", "</tag2>"],
+        "fields" : {
+            "content" : {}
+        }
+    }
+}
+'
 ```
 
 ### match_phrase
@@ -119,15 +135,28 @@ get /testcopy/_search
 }
 ```
 
-## wildcard模糊查询
+### regexp正则查询
 
-```js
+```json
+GET /demo/_search
+{
+    "query": {
+        "regexp": {
+            "postcode": "W[0-9].+" 
+        }
+    }
+}
+```
+
+## wildcard模糊（通配符）查询
+
+```json
 // 查询
 GET /_search
 {
   "query": {
     "wildcard" : {
-      "content": "*test*",
+      "problem": "*12*"
     }
   }
 }
@@ -136,16 +165,55 @@ GET /_search
 GET /_search
 {
   "query": {
-    "boo1": {
-      "must": {
-        "wildcard": {
-          "problem": {
-            "wildcard": "*测试*"
+    "bool": {
+      "must": [
+        {
+          "wildcard": {
+            "problem": "*测试*"
           }
         }
+      ]
+    }
+  }
+}
+```
+
+### fuzzy 模糊/纠错检索
+
+```json
+GET demo/_search 
+{
+    "query": {
+        "fuzzy": {
+            "name.keyword": "张三" //如：输入个“邓子棋”，也能把“邓紫棋”查出来，有一定的纠错能力
+        }
+    }
+}
+
+// 使用match来查询
+GET fuzzyindex/_search
+{
+  "query": {
+    "match": {
+      "content": {
+        "query": "bxxe",
+        "fuzziness": "2" //auto
       }
     }
   }
 }
+// 与以上相等  fuzzy
+GET /_search
+{
+  "query": {
+    "fuzzy": {
+      "content": {
+        "value": "bxxe",
+        "fuzziness": "2"
+      }
+    }
+  }
+}
+
 ```
 

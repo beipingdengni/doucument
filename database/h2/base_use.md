@@ -70,6 +70,14 @@ private static final String url = "jdbc:h2:mem:testdb";
 
 ```
 
+
+
+```java
+
+```
+
+
+
 ## 基本配置
 
 Jpa 模式

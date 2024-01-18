@@ -49,3 +49,17 @@ MySQL的默认编码是Latin1，不支持中文
 
 > DROP INDEX index_name ON table
 
+
+
+## 插入数据
+
+### 检查如果存在key，则更新数据
+
+> ON DUPLICATE KEY UPDATE 
+
+```
+insert into (id,name,age) values('1','tian',19)
+ON DUPLICATE KEY UPDATE 
+name='tian',age='age'
+```
+

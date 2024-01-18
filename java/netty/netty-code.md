@@ -1,14 +1,34 @@
 
 
+## 内置编码器
+
+```java
+// netty中基本的codec有base64、bytes、compression、json、marshalling、protobuf、serialization、string和xml这几种
+netty-codec
+netty-codec-http
+netty-codec-http2
+netty-codec-memcache
+netty-codec-redis
+netty-codec-socks
+netty-codec-stomp
+netty-codec-mqtt
+netty-codec-haproxy
+netty-codec-dns
+```
 
 
-# 编码、解码
+
+## netty编码、解码结合（msgpack、protobuf）案例
 
 ### decoder：MessageToMessageDecoder\<ByteBuf>
 
 ### encoder：MessageToByteEncoder\<User>
 
-## msgpack
+
+
+## 使用msgpack处理案列
+
+> MessagePack 是一个高效的二进制序列化格式。它让你像JSON一样可以在各种语言之间交换数据。但是它比JSON更快、更小。小的整数会被编码成一个字节，短的字符串仅仅只需要比它的长度多一字节的大小
 
 ```xml
 <dependency>
@@ -16,6 +36,7 @@
     <artifactId>msgpack</artifactId>
     <version>0.6.12</version>
 </dependency>
+<!-- 原有json长度：27 byte  / msgPack长度：18 byte -->
 ```
 
 ### 解码器

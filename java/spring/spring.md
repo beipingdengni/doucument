@@ -1,9 +1,12 @@
+## Spring 启动顺序
+
+<img src="https://pic2.zhimg.com/80/v2-f7402c5f14604c9ce0d5b0bb3a1fba35_1440w.webp" alt="img" style="zoom:50%;" />
+
+
+
 ## Spring
 
-
-
 ```java
-
 启动拦截：如：EnableFeignClients 等
 接口： ImportBeanDefinitionRegistrar
 
@@ -13,8 +16,6 @@
 	// bean前置处理注入bean
 	BeanDefinitionRegistryPostProcessor
 ```
-
-
 
 ### BeanDefinitionRegistry 和 BeanDefinitionHolder
 

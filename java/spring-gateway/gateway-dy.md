@@ -69,7 +69,7 @@ org.springframework.cloud.gateway.actuate.AbstractGatewayControllerEndpoint
 
 ## 动态刷新,发送RefreshRoutesEvent刷新事件
 
-```
+```java
 @Service
 public class GatewayDynamicRouteService implements ApplicationEventPublisherAware {
 
