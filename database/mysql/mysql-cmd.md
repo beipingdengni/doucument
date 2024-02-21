@@ -37,7 +37,6 @@ select @@system_time_zone,@@time_zone;
 	set time_zone = '+8:00'; 修改当前会话时区
 	flush privileges;		使之立即生效
 
-
 参考博客：https://blog.csdn.net/w8y56f/article/details/115473001
 ```
 

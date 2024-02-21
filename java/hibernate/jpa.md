@@ -1,6 +1,6 @@
 ## JPA数据处理
 
-1、创建查询的顺序
+### 1、创建查询的顺序
 
 ```
 Spring Data JPA 在为接口创建代理对象时，如果发现同时存在多种上述情况可用，它该优先采用哪种策略呢？为此，<jpa:repositories> 提供了 query-lookup-strategy 属性，用以指定查找的顺序。它有如下三个取值：
@@ -11,14 +11,14 @@ use-declared-query --- 如果方法通过 @Query 指定了查询语句，则使�
 
 ```
 
-2、事务
+### 2、事务
 
 ```
 默认情况下，Spring Data JPA 实现的方法都是使用事务的。针对查询类型的方法，其等价于 @Transactional(readOnly=true)；增删改类型的方法，等价于 @Transactional。可以看出，除了将查询的方法设为只读事务外，其他事务属性均采用默认值。
 
 ```
 
-3、接口中的部分方法提供自定义实现
+### 3、接口中的部分方法提供自定义实现
 
 ```
 为了享受 Spring Data JPA 带给我们的便利，同时又能够为部分方法提供自定义实现，我们可以采用如下的方法
@@ -41,7 +41,7 @@ repository-impl-postfix="Impl"/>
 框架扫描到 AccountDao 接口时，它将尝试在相同的包目录下查找 AccountDaoImpl.java，如果找到，便将其中的实现方法作为最终生成的代理类中相应方法的实现
 ```
 
-spring boot 处理 
+## spring boot 处理 
 
 参考博客：
 
@@ -85,7 +85,7 @@ persistence.xml
 
 
 
-spring xml 配置
+### spring xml 配置
 
 ```xml
 <beans>
@@ -104,7 +104,7 @@ spring xml 配置
 				transaction-manager-ref="transactionManager"/>
 ```
 
-Dao 业务层处理 
+### Dao 业务层处理 
 
 ```java
 public interface UserDao extends Repository<AccountInfo, Long> { 
@@ -124,7 +124,7 @@ public interface UserDao extends Repository<AccountInfo, Long> {
 }
 ```
 
-##### 关键字处理，解析生产SQL
+### 关键字处理，解析生产SQL
 
 ```
 Spring Data JPA 为此提供了一些表达条件查询的关键字，大致如下：
@@ -146,7 +146,7 @@ NotIn --- 等价于 SQL 中的 "not in"，比如 findByUsernameNotIn(Collection<
 
 ```
 
-##### 自定义启动类【HIbernate】
+### 自定义启动类【HIbernate】
 
 ```java
 @Id

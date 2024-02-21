@@ -10,7 +10,7 @@
 
 ![tu](https://pic2.zhimg.com/v2-8c591d54457bb033812a2b0364011e9c_1200x500.jpg)
 
-```
+```markdown
 Scrapy Engine
 	引擎负责控制数据流在系统中所有组件中流动，并在相应动作发生时触发事件。 详细内容查看下面的数据流(Data Flow)部分。
 	
@@ -31,12 +31,11 @@ Item Pipeline
 	
 Spider中间件(Spider middlewares)
 	Spider中间件是在引擎及Spider之间的特定钩子(specific hook)，处理spider的输入(response)和输出(items及requests)。 其提供了一个简便的机制，通过插入自定义代码来扩展Scrapy功能。
-
 ```
 
 #### 数据流(Data flow)
 
-```
+```markdown
 1、引擎打开一个网站(open a domain)，找到处理该网站的Spider并向该spider请求第一个要爬取的URL(s)。
 2、引擎从Spider中获取到第一个要爬取的URL并在调度器(Scheduler)以Request调度。
 3、引擎向调度器请求下一个要爬取的URL。
@@ -49,13 +48,11 @@ Spider中间件(Spider middlewares)
 
 ```
 
-
-
 ## 以下简单demo
 
 ### 安装
 
-```
+```shell
 pip3 install scrapy -i https://pypi.douban.com/simple/
 
 pip install scrapy
@@ -68,7 +65,7 @@ pip install bs4
 
 ### 创建project、spider
 
-```
+```shell
 python3 -m scrapy startproject scrapyspider
 python3 -m scrapy genspider douban https://book.douban.com
 
@@ -137,6 +134,90 @@ class AccupassSpider(scrapy.Spider):
  
     def start_requests(self):
         yield SeleniumRequest(url='http://book.douban.com', callback=self.parse)
+
+```
+
+京东商城手机页面爬取
+
+```python
+import scrapy
+from scrapy import Item, Field
+from scrapy_selenium import SeleniumRequest
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+# 定义一个Item类
+class HuaweiPhoneItem(Item):
+    phone_name = Field()
+    phone_price = Field()
+    phone_image = Field()
+    phone_description = Field()
+
+# 爬虫
+class JDPhoneSpider(scrapy.Spider):
+    name = 'jd_phone'
+    start_urls = ['https://list.jd.com/list.html?cat=9987,653,655']
+
+    def start_requests(self):
+        for url in self.start_urls:
+            yield SeleniumRequest(url=url, callback=self.parse)
+
+    def parse(self, response):
+        phone_items = response.css('.gl-item')
+        for item in phone_items:
+            shop_name = item.css('.curr-shop::text').get()
+            if '京东自营' in shop_name:  # 只获取京东自营店
+                phone_name = item.css('.p-name a::text').get()
+                if '华为' in phone_name or 'HUAWEI' in phone_name:  # 只获取华为手机
+                    phone_image = item.css('.p-img img::attr(data-lazy-img)').get()
+                    phone_description = item.css('.p-name a::attr(title)').get()
+                    # 等待价格加载完成
+                    price_element = WebDriverWait(response, 10).until(
+                        EC.presence_of_element_located((By.CSS_SELECTOR, '.p-price strong i'))
+                    )
+                    phone_price = price_element.text
+                    # 使用Item存储数据
+                    yield HuaweiPhoneItem(
+                        phone_name=phone_name.strip(),
+                        phone_price=phone_price,
+                        phone_image=response.urljoin(phone_image),  # 补全图片URL
+                        phone_description=phone_description
+                    )
+
+        # 处理分页
+        next_page_element = response.css('.pn-next')
+        next_page = next_page_element.attrib['href'] if next_page_element else None
+        if next_page:
+            next_page_url = response.urljoin(next_page)
+            yield SeleniumRequest(url=next_page_url, callback=self.parse)
+
+# 输出 到execl中
+# scrapy crawl jd_phone -o huawei_phones.csv
+
+# pip install pandas openpyxl
+# pipelines.py
+import pandas as pd
+
+class ExcelExportPipeline:
+    def open_spider(self, spider):
+        # 在爬虫开始时初始化pandas DataFrame
+        self.items = []
+
+    def close_spider(self, spider):
+        # 在爬虫结束时将DataFrame保存到Excel文件
+        df = pd.DataFrame(self.items)
+        df.to_excel('huawei_phones.xlsx', index=False)
+
+    def process_item(self, item, spider):
+        # 将每个item添加到列表中
+        self.items.append(item)
+        return item
+
+# settings.py
+ITEM_PIPELINES = {
+    'myproject.pipelines.ExcelExportPipeline': 300,
+}
 
 ```
 

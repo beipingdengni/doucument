@@ -38,10 +38,24 @@ driver.find_element(By.LINK_TEXT,'LINK_TEXT')
 driver.find_element(By.PARTIAL_LINK_TEXT,'PARTIAL_LINK_TEXT')
 driver.find_element(By.TAG_NAME,'TAG_NAME')
 
+# 设置隐式等待时间为
+driver = webdriver.Chrome()  
+driver.implicitly_wait(10)  # 设置隐式等待时间为10秒  
+driver.get("http://www.example.com")  
+element = driver.find_element_by_id("some_id")
 
 #等待元素出现
-from selenium.webdriver.support.ui import WebDriverWait
-el = WebDriverWait(driver, timeout=3).until(lambda d: d.find_element_by_tag_name("p"))
+from selenium import webdriver  
+from selenium.webdriver.common.by import By  
+from selenium.webdriver.support.ui import WebDriverWait  
+from selenium.webdriver.support import expected_conditions as EC  
+  
+driver = webdriver.Chrome()  
+driver.get("http://www.example.com")  
+try:  
+    element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "some_id"))  
+finally:  
+    driver.quit()
 
 #动作API
 	#暂停（pause）

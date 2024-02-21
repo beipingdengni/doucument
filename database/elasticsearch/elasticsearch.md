@@ -81,3 +81,45 @@ GET _tasks?pretty
 POST _tasks/oTUltX4IQMOUUVeiohTt8A:12345/_cancel
 ```
 
+## 别名
+
+### 添加
+
+```
+POST /_aliases
+{
+    "actions": [
+        { "add": { "index": "index_1", "alias": "my_alias" }},
+        { "add": { "index": "index_2", "alias": "my_alias" }}
+    ]
+}
+```
+
+### 修改
+
+```http
+POST /_aliases
+{
+    "actions": [
+        { "remove": { "index": "index_1", "alias": "my_alias" }},
+        { "add": { "index": "index_3", "alias": "my_alias" }}
+    ]
+}
+```
+
+### 删除
+
+```http
+POST /_aliases
+{
+    "actions": [
+        { "remove": { "index": "index_name", "alias": "alias_name" }}
+    ]
+}
+
+DELETE /index_name/_alias/alias_name
+DELETE /_all/_alias/alias_name  # 如果别名指向多个索引，并且你想要删除这个别名与所有相关索引的关联，可以省略索引名：
+DELETE /*/_alias/alias_name   # 或者使用通配符匹配多个索引：
+
+```
+

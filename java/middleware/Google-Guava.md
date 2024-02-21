@@ -20,42 +20,44 @@
 maven 引入包
 ----
 
-    ``` xml
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>23.0</version>
-            <!-- or, for Android: -->
-            <version>23.0-android</version>
-        </dependency>
-    ```
+```xml
+<dependency>
+  <groupId>com.google.guava</groupId>
+  <artifactId>guava</artifactId>
+  <version>23.0</version>
+  <!-- or, for Android: -->
+  <version>23.0-android</version>
+</dependency>
+```
 
 gradle 映入
 ----
 
-    ``` java
-        dependencies {
-            compile 'com.google.guava:guava:23.0'
-            // or, for Android:
-            compile 'com.google.guava:guava:23.0-android'
-            }
-    ```
+```groovy
 
-1. **介绍guava缓存**
+dependencies {
+  compile 'com.google.guava:guava:23.0'
+  // or, for Android:
+  compile 'com.google.guava:guava:23.0-android'
+}
+
+```
+
+1. **介绍guava缓存**
 
     > 简单的demo
 
     ``` java
-        LoadingCache<Key, Graph> graphs = CacheBuilder.newBuilder()
-                .maximumSize(1000)
-                .expireAfterWrite(10, TimeUnit.MINUTES)  // 在添加十分钟后删除缓存
-                .removalListener(MY_LISTENER) // 自行添加删除的监听器的实现
-                .build(
-                    new CacheLoader<Key, Graph>() {
-                        public Graph load(Key key) throws AnyException {
-                            return createExpensiveGraph(key);
-                        }
-                });
+    LoadingCache<Key, Graph> graphs = CacheBuilder.newBuilder()
+      .maximumSize(1000)
+      .expireAfterWrite(10, TimeUnit.MINUTES)  // 在添加十分钟后删除缓存
+      .removalListener(MY_LISTENER) // 自行添加删除的监听器的实现
+      .build(
+      new CacheLoader<Key, Graph>() {
+        public Graph load(Key key) throws AnyException {
+          return createExpensiveGraph(key);
+        }
+      });
     ```
 
 2. 介绍一下cache 参数的相关设置

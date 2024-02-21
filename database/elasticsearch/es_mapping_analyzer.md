@@ -135,6 +135,52 @@
       单向同义词以 =>分隔，如 i-pod, i pod => ipod
       ```
 
+## 索引不存在添加
+
+```http
+PUT /my_index
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "my_custom_analyzer": {
+          "type": "custom",
+          "tokenizer": "ik_max_word",
+          "filter": [
+            "lowercase"
+          ]
+        }
+      }
+    }
+  }
+}
+```
+
+## 索引已经存在添加
+
+> 为现有索引添加自定义分析器： 如果索引已经存在，你需要先关闭索引，然后更新设置，并重新打开索引：
+
+```http
+hPOST /my_index/_close
+
+PUT /my_index/_settings
+{
+  "analysis": {
+    "analyzer": {
+      "my_custom_analyzer": {
+        "type": "custom",
+        "tokenizer": "ik_max_word",
+        "filter": [
+          "lowercase"
+        ]
+      }
+    }
+  }
+}
+
+POST /my_index/_open
+```
+
 
 
 # 分词器验证(ik、ngram、pinyin)

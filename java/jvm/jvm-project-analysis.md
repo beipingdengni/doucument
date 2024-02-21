@@ -7,8 +7,6 @@ jstat -gcutil 49030 1000 20
 jstat -gcutil pid 时间秒 次数
 ```
 
-
-
 ## jstack
 
 ```
@@ -30,8 +28,6 @@ jstack [-option] <pid> // 打印某个进程的堆栈信息
 输出到文件： jstack <pid> > <pid>_core.dum
 ```
 
-
-
 ## jmap
 
 ```
@@ -44,8 +40,6 @@ jmap -histo <pid>
 查看 ClassLoader 统计信息
 jmap -clstats <pid>
 ```
-
-
 
 ## jcmd
 

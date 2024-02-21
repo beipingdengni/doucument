@@ -4,7 +4,7 @@
 
 安装：
 
-```
+```yaml
 mac：
 brew install kubernetes-cli
 liunx：

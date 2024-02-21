@@ -95,3 +95,71 @@ public ThreadPoolTaskExecutor threadPoolTaskExecutor() {
 
 ```
 
+# 自定义动态添加任务
+
+## 核心类处理
+
+> config.ScheduledTaskRegistrar#scheduleTasks
+
+```java
+@Configuration      //1.主要用于标记配置类，兼备Component的效果。
+@EnableScheduling   // 2.开启定时任务
+public class DynamicScheduleTask implements SchedulingConfigurer {
+ 
+    @Mapper
+    public interface CronMapper {
+      @Select("select cron from cron limit 1")
+      public String getCron();
+   }
+
+    @Autowired //注入mapper // 数据库中获取
+    CronMapper cronMapper;
+ 		
+  	// 执行定时任务
+    @Override
+    public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
+			 //设置20个线程,默认单线程,如果不设置的话，不能同时并发执行任务
+        registrar.setScheduler(Executors.newScheduledThreadPool(10));
+        this.registrar = registrar;
+     
+        taskRegistrar.addTriggerTask(
+            //1.添加任务内容(Runnable)
+            // 这里的代码可以变，
+            () -> System.out.println("执行动态定时任务: " + LocalDateTime.now().toLocalTime()),
+            //2.设置执行周期(Trigger)
+            // 基本不变
+            triggerContext -> {
+                //2.1 从数据库获取执行周期
+                String cron = cronMapper.getCron();
+                //2.2 合法性校验.
+                if (StringUtils.isEmpty(cron)) {
+                    // Omitted Code ..
+                }
+                //2.3 返回执行周期(Date)
+                return new CronTrigger(cron).nextExecutionTime(triggerContext);
+            }
+        );
+    }
+  
+  	// 任务添加
+  	public void	addJob(String jobId,String beanName,String cron){
+      	// ScheduledFuture<?> future = registrar.getScheduler().schedule(task.getRunnable(), task.getTrigger());
+      	// registrar.addScheduledTask() //需要调用执行
+        registrar.scheduleTriggerTask(new CronTask(new Runnable(){ /*.....*/ },cron))
+    } 
+  	
+  	// 任务删除
+	  public void	stopAll(){
+      	 registrar.getScheduledTasks().forEach(future->{
+           // mayInterruptIfRunning设成false话，不允许在线程运行时中断，设成true的话就允许。
+           future.cancel(false);
+        });
+    } 
+  
+  	@PreDestroy
+    public void destroy() {
+        this.registrar.destroy();
+    }
+}
+```
+

@@ -1,3 +1,9 @@
+## canel配置
+
+https://github.com/alibaba/canal/wiki/QuickStart
+
+
+
 # mysql查看binlog日志
 
 ![image-20240118172349326](imgs/mysql-binglog/image-20240118172349326.png)
@@ -87,6 +93,22 @@ mysqlbinlog -vv mysql-bin.000001
 1. 使用`reset master`,该命令将会删除所有日志，并让日志文件重新从000001开始
 2. `purge master logs to "binlog_name.00000X" ` 指定删除日志文件
 3. 使用`--expire_logs_days=N`选项指定过了多少天日志自动过期清空
+
+# java读取
+
+## canl
+
+> https://github.com/alibaba/canal
+
+```xml
+<dependency>
+  <groupId>com.github.shyiko</groupId>
+  <artifactId>mysql-binlog-connector-java</artifactId>
+  <version>0.13.0</version>
+</dependency>
+```
+
+
 
 # python读取
 

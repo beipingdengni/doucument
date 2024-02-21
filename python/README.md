@@ -10,6 +10,10 @@ source bin/activate
 python -m pip install -r requirements.txt
 ```
 
+### 安装依赖
+
+> pip3 install -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com -r requirements.txt
+
 # pip、conda 包管理
 
 ## 临时换源：临时换源只需要在[pip安装](https://so.csdn.net/so/search?q=pip安装&spm=1001.2101.3001.7020)包时，加上一个-i参数后接源的url即可

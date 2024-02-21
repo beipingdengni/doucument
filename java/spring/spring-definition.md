@@ -66,7 +66,27 @@ System.out.println(bean2 + ",id=" + bean2.getId() + ",name=" + bean2.getName());
 
 > Spring 2.5 之后，推荐通过 GenericBeanDefinition#setParentName() 的方式来替代 ChildBeanDefinition。
 
+### 常使用GenericBeanDefinition案例
 
+```java
+public class BeanDefinitionExample {
+    public static void main(String[] args) {
+        DefaultListableBeanFactory factory = new DefaultListableBeanFactory();
+
+        GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
+        beanDefinition.setBeanClass(MyBean.class);
+
+        ConstructorArgumentValues constructorArgs = new ConstructorArgumentValues();
+        constructorArgs.addIndexedArgumentValue(0, "argumentValue");
+        beanDefinition.setConstructorArgumentValues(constructorArgs);
+
+        factory.registerBeanDefinition("myBean", beanDefinition);
+
+        MyBean myBean = factory.getBean("myBean", MyBean.class);
+        myBean.doSomething();
+    }
+}
+```
 
 
 
@@ -105,8 +125,6 @@ public static Map<String, Object> beanToMap(Object obj) {
   return map;
 }
 ```
-
-
 
 ## PropertyEditor
 

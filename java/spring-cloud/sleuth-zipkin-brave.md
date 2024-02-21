@@ -246,11 +246,14 @@ public class TracingConfiguration extends WebMvcConfigurerAdapter {
 /** Configuration for how to send spans to Zipkin */
 @Value("${spring.zipkin.baseUrl:http://127.0.0.1:9411/api/v2/spans}")
     private String baseUrl;
-    @Value("${spring.zipkin.turnOn:false}")
+    
+  	@Value("${spring.zipkin.turnOn:false}")
     private boolean turnOn;
-    @Value("${spring.application.name}")
+    
+  	@Value("${spring.application.name}")
     private String serviceName;
-    @Bean
+    
+  	@Bean
     Sender sender() {
         return OkHttpSender.create(baseUrl);
     }
@@ -264,11 +267,15 @@ public class TracingConfiguration extends WebMvcConfigurerAdapter {
     /** Controls aspects of tracing such as the name that shows up in the UI */
     @Bean
     Tracing tracing() {
-        return Tracing.newBuilder().localServiceName(serviceName)
-           .propagationFactory(ExtraFieldPropagation.newFactory(B3Propagation.FACTORY, "user-name"))
-           .currentTraceContext(ThreadLocalCurrentTraceContext.newBuilder()
-                       .addScopeDecorator(MDCScopeDecorator.create()).build())
-               .spanReporter(spanReporter()).build();
+        return Tracing.newBuilder()
+          .localServiceName(serviceName)
+          .propagationFactory(ExtraFieldPropagation.newFactory(B3Propagation.FACTORY, "user-name"))
+          .currentTraceContext(ThreadLocalCurrentTraceContext
+                               .newBuilder()
+                               .addScopeDecorator(MDCScopeDecorator.create())
+                               .build())
+          .spanReporter(spanReporter())
+          .build();
     }
   
     /**
@@ -329,6 +336,91 @@ public class TracingConfiguration extends WebMvcConfigurerAdapter {
     }
 }
 ```
+
+## 本地答应不上报
+
+要在 Java 应用程序中实现分布式链路追踪，你可以使用 Brave 框架。以下是一个简单的示例，演示了如何在 Java 应用程序中使用 Brave 框架进行分布式链路追踪：
+
+首先，你需要在你的项目中引入 Brave 相关的依赖，通常是通过 Maven 或 Gradle 进行引入：
+
+```xml
+<dependency>
+    <groupId>io.zipkin.brave</groupId>
+    <artifactId>brave</artifactId>
+    <version>5.12.5</version>
+</dependency>
+<dependency>
+    <groupId>io.zipkin.reporter2</groupId>
+    <artifactId>zipkin-reporter</artifactId>
+    <version>2.15.0</version>
+</dependency>
+```
+
+接下来，你可以创建一个配置类来配置 Brave 框架：
+
+```java
+import brave.Tracing;
+import brave.context.log4j2.ThreadContextScopeDecorator;
+import brave.propagation.B3Propagation;
+import brave.propagation.CurrentTraceContext;
+import brave.propagation.TraceContext;
+import brave.sampler.Sampler;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class BraveConfig {
+
+    @Bean
+    public Tracing tracing() {
+        return Tracing.newBuilder()
+                .localServiceName("your-service-name")
+                .sampler(Sampler.ALWAYS_SAMPLE)
+                .propagationFactory(B3Propagation.FACTORY)
+                .currentTraceContext(CurrentTraceContext.Default.create())
+                .addScopeDecorator(ThreadContextScopeDecorator.create())
+                .build();
+    }
+}
+```
+
+在这个配置类中，我们创建了一个名为 `tracing` 的 Bean，用于配置 Brave 框架的追踪信息。
+
+最后，你可以在你的业务代码中使用 Brave 框架提供的 API 来创建和管理追踪信息。例如：
+
+```java
+import brave.Span;
+import brave.Tracer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class YourService {
+
+    @Autowired
+    private Tracer tracer;
+
+    public void performBusinessOperation() {
+        // 创建一个新的 span
+        Span newSpan = tracer.newTrace().name("your-operation").start();
+
+        try {
+            // 在这里执行你的业务逻辑
+            // ...
+
+            // 结束 span
+            newSpan.finish();
+        } catch (Exception e) {
+            // 如果发生异常，记录错误信息到 span
+            newSpan.error(e);
+        }
+    }
+}
+```
+
+在这个示例中，我们使用了 Brave 框架的 `Tracer` 来创建一个新的 span，并在业务逻辑中执行操作。在实际的业务代码中，你还需要在合适的地方创建和管理 span，以便进行分布式链路追踪。
+
+希望这个示例能够帮助你开始在 Java 应用程序中使用 Brave 框架实现分布式链路追踪！
 
 ## 举例
 

@@ -1,6 +1,35 @@
 ## Docker —help
 
+## 删除容器
 
+```shell
+docker rm 容器id                  #删除指定的容器 #不能删除正在运行的容器,如果强制删除 rm -f
+docker rm -f $(docker ps -aq)     #删除所有的容器
+docker ps -a -qlxargs docker rm   #删除所有容器
+
+# shell脚本（运行完成就删除）
+docker run -d centos /bin/sh -c "while true;do echo cpf; sleep 1;done"
+# 进入容器
+docker exec -it 14c64d9110c8 /bin/bash #进入容器后,开一个新的终端,可以在里面进行操作(常用)
+docker attach 14c64d9110c8  #进入容器正在执行的终端,不会启动新的进程
+
+# 复制 docker cp 源文件 目的位置
+docker cp bbb090833a4e:home/text.txt /home # 容器下载
+docker cp /home/text.txt bbb090833a4e:home/ # 上传容器
+
+#显示日志   
+ -tf           #显示全部
+ -tail  number #要显示的日志条数
+docker logs -tf --tail 10  14c64d9110c8
+
+# 查看镜像的元数据
+docker inspect 14c64d9110c8
+# go的template语法
+docker inspect -f 'Hello from container {{.Name}}' jenkins
+#输出结果：Hello from container /jenkins
+```
+
+## help
 
 ```
 Options:

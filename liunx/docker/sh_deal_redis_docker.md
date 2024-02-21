@@ -14,8 +14,6 @@ rm -rf ~/docker_id.txt
 
 ```
 
-
-
 # redis 操作
 
 脚本执行
