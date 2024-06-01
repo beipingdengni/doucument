@@ -1,6 +1,63 @@
+# Mysql自带数据库备份
+
+## 第一种方式：load（导入、导出）
+
+使用案例
+
+```sql
+// 导出
+select * from mytable where status!=0 and name!='' into outfile '/home/db_bak2012' fields terminated by '|' enclosed by '"' lines terminated by '\r\n' ;
+
+// 导入
+load data infile  '/home/db_bak2012' into table mytable_bak fields terminated by '|' enclosed by '"' lines terminated by '\r\n' ;
+```
+
+使用注意：
+
+1、关键词low_priority：如果你指定关键词low_priority， 那么MySQL将会等到没有其他人读这个表的时候，才把插入数据。可以使用如下的命令
+
+```sql
+load data low_priority infile "/home/mark/data sql" into table Orders;
+```
+
+2、如果指定local关键词，则表明从客户主机读文件。如果local没指定，文件必须位于服务器上
+
+3、replace和ignore关键词控制对现有的唯一键记录的重复的处理。如果你指定replace，新行将代替有相同的唯一键值的现有行。如果你指定ignore，跳过有唯一键的现有行的重复行的输入。如果你不指定任何一个选项，当找到重复键时，出现一个错误，并且文本文件的余下部分被忽略。例如：
+
+```sql
+load data low_priority infile "/home/mark/data sql" replace into table Orders;
+```
+
+### 语法
+
+```sql
+load data  [low_priority] [local] infile 'file_name txt' [replace | ignore]
+ into table tbl_name
+ [fields]
+ [terminated by 't']
+ [OPTIONALLY] enclosed by '']
+ [escaped by'\' ]]
+ [lines terminated by'n']
+ [ignore number lines]
+ [(col_name,   )]
+ 
+terminated by	分隔符：意思是以什么字符作为分隔符
+enclosed by	字段括起字符
+escaped by	转义字符 
+terminated by 	描述字段的分隔符，默认情况下是tab字符（\t） 
+enclosed by	描述的是字段的括起字符。
+escaped by	描述的转义字符。默认的是反斜杠（backslash：\ ）   
+ 
+例如：load data infile "/home/mark/Orders txt" replace into table Orders fields terminated by',' enclosed by '"';
+```
+
+## 第二种方式：source（导入）
+
+>  source /root/pro_sql/test.sql （source后边为sql文件存放位置）
 
 
-## Mysql自带数据库备份
+
+## 第三种方式：mysqldump（导出）
 
 ### 数据导出
 

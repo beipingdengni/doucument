@@ -6,6 +6,25 @@
 
 https://www.sqlite.org/index.html
 
+### Spring boot 连接
+
+```yaml
+# application.yml
+spring:
+  mvc.async.request-timeout: 20000
+  application:
+    name: druid-jdbc-mysql
+  datasource:
+    url: jdbc:sqlite:./demo.db
+    driver-class-name: org.sqlite.JDBC
+    username: root
+    password: root
+    #schema: classpath:db/schema.sql
+    #data: classpath:db/data.sql
+```
+
+
+
 ## java连接
 
 ```properties
@@ -13,9 +32,14 @@ https://www.sqlite.org/index.html
 #dataSource.setUrl("jdbc:sqlite:./demo.db");
 
 spring.datasource.driver-class-name=org.sqlite.JDBC # 数据驱动
+#绝对位置配置方式
+#spring.datasource.url=jdbc:sqlite:E:/db/test.db
+#相对位置配置方式
+#spring.datasource.url=jdbc:sqlite::resource:db/test.db
 spring.datasource.url=jdbc:sqlite:./demo.db  # 数据库地址
 spring.datasource.username=
 spring.datasource.password=
+spring.datasource.driver-class-name=org.sqlite.JDBC
 ```
 
 

@@ -46,6 +46,15 @@ s/pattern/replacement/flags
 
 
 
+```shell
+grep 'amqp message send, amqpEnum' cs-event-center_detail.log \
+|sed -e 's/.*costTime: \([0-9]\+\)$/\1/g' |sort 
+# 或
+# sed -e 's/^\(24-05-23.[0-9]\+:[0-9]\+:[0-9]\+.[0-9]\+\).*costTime: \([0-9]\+\)/\1 \2/g'
+```
+
+
+
 ### 命令组合
 
 sed '3,${  s/this/the/  s/root/redhat/  }' test.txt

@@ -19,6 +19,9 @@ alter database 数据库名称 default character set 编码方式 collate 编码
 
 -- 删除数据库
 DROP DATABASE IF EXISTS `my_demo_db`;
+
+-- 查看所有表的列
+SHOW FULL COLUMNS FROM job_exec_result;
 ```
 
 ### 后缀表示该比较规则是否区分语言中的重音、大小写。具体如下：

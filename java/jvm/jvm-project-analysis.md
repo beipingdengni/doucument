@@ -22,7 +22,7 @@ jstack [-option] <pid> // 打印某个进程的堆栈信息
 
 ```
 查看CUP靠前：top -Hp pid
-	转化CPU高的：printf “%x\n” 3440  
+	转化CPU高的：printf "%x\n" 3440  
 工作台查看：jstack pid 
 	jstack pid |grep "print的16进制的值"
 输出到文件： jstack <pid> > <pid>_core.dum

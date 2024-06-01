@@ -7,8 +7,13 @@
 ## 打包不含依赖
 
 ```python
+# 虚拟环境问题
+pip cache purge
 # 安装
 pip install -r requirements.txt
+
+pip list --format=freeze > requirements.txt
+/#使用上述命令导出的文件中，会包含如下几个包：distribute，pip，setuptools，wheel，建议手动删除！
 ```
 
 ## 打包保护依赖

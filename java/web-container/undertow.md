@@ -1,35 +1,24 @@
-
-
-## XML引入
+## maven 2
 
 ```xml
 <dependency>
     <groupId>io.undertow</groupId>
     <artifactId>undertow-core</artifactId>
-    <version>2.1.0.Final</version>
+    <version>2.3.10.Final</version>
 </dependency>
-
 <dependency>
     <groupId>io.undertow</groupId>
     <artifactId>undertow-servlet</artifactId>
-    <version>2.1.0.Final</version>
+    <version>2.3.10.Final</version>
 </dependency>
-
-<dependency>
-    <groupId>io.undertow</groupId>
-    <artifactId>undertow-websockets-jsr</artifactId>
-    <version>2.1.0.Final</version>
-</dependency>
-
 ```
 
+## java代码演示
 
-
-参考启动
+#### 基础使用
 
 ```java
 public class HelloWorldServer {
-
     public static void main(final String[] args) {
         Undertow server = Undertow.builder()
                 .addHttpListener(8080, "localhost")
@@ -40,41 +29,40 @@ public class HelloWorldServer {
                         exchange.getResponseSender().send("Hello World");
                     }
                 }).build();
-            server.start();
+        server.start();
     }
 }
+// java -cp target/dependency/*:target/undertow-quickstart.jar org.wildfly.undertow.quickstart.HelloWorldServer
+// 访问返回：http://localhost:8080
 ```
 
+### 集成到severlet
 
-
-### spring boot 使用
-
-> Undertow容器的具体配置可以看这两个类：
->
-> - org.springframework.boot.autoconfigure.web.ServerProperties
-> - org.springframework.boot.autoconfigure.web.ServerProperties.Undertow
-
-```xml
-<dependencies>
+```java
+public class ServletServer {  
+      
+  public static final String MYAPP = "/myapp";
+  
+  public static void main(String[] args) throws ServletException {  
     
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-web</artifactId>
-        <exclusions>
-            <!-- Exclude the Tomcat dependency -->
-            <exclusion>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-tomcat</artifactId>
-            </exclusion>
-        </exclusions>
-    </dependency>
+    ClassLoader classLoader = ServletServer.class.getClassLoader()
+    DeploymentInfo servletBuilder = Servlets.deployment().setClassLoader(classLoader)  
+      .setContextPath(MYAPP)  
+      .setDeploymentName("myapp.war")  
+      .addServlets(Servlets.servlet("MessageServlet", MessageServlet.class).addMappings("/messageServlet")  
+                   , Servlets.servlet("MyServlet", MyServlet.class).addMappings("/myServlet"));
 
-    <!-- Use Undertow instead -->
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-undertow</artifactId>
-    </dependency>
+    DeploymentManager manager = Servlets.defaultContainer().addDeployment(servletBuilder);  
+    manager.deploy();  
 
-</dependencies>
+    HttpHandler servletHandler = manager.start();  
+    PathHandler path = Handlers.path(Handlers.redirect(MYAPP)).addPrefixPath(MYAPP, servletHandler);  
+
+    Undertow server = Undertow.builder().addHttpListener(8080, "localhost").setHandler(path).build();  
+    server.start();  
+  }
+  // http://localhost:8080/myapp/messageServlet
+  // http://localhost:8080/myapp/myServlet
+}
 ```
 

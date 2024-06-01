@@ -129,3 +129,50 @@ public List<String> scrollSearchAll(String indexName, String utime) throws IOExc
 }
 ```
 
+
+
+```http
+post http://localhost:9200/ia_session_detail_202405/_search?scroll=5m
+
+{
+    "_scroll_id": "DnF1ZXJ5VGhlbkZldGNoBQAAAAAE-4t7FnVfbEpCcVJvUlhhTlRFNmxSZWNyU1EAAAAABEzZuRZCUl9GX3RnNlFzQ1hqY2VZdjhjU2N3AAAAAARM2boWQlJfRl90ZzZRc0NYamNlWXY4Y1NjdwAAAAAE-4t8FnVfbEpCcVJvUlhhTlRFNmxSZWNyU1EAAAAABEzZuxZCUl9GX3RnNlFzQ1hqY2VZdjhjU2N3",
+    "took": 1,
+    "timed_out": false,
+    "_shards": {
+        "total": 5,
+        "successful": 5,
+        "skipped": 0,
+        "failed": 0
+    },
+    "hits": {
+        "total": 2,
+        "max_score": 10.992847,
+        "hits": [
+            {
+                "_index": "ia_session_detail_202405",
+                "_type": "log",
+                "_id": "20240501092211955106",
+                "_score": 10.992847,
+                "_source": {
+                    "entry": "STD_API_HTTP",
+                }
+            },
+            
+        ]
+    }
+}
+
+post http://localhost:9200/_search/scroll
+{
+	"scroll":"1m",
+	"scroll_id":result['_scroll_id']
+}
+
+
+DELETE /_search/scroll
+{
+  "scroll_id" : result['_scroll_id']
+}
+
+```
+

@@ -37,6 +37,28 @@ docker run -it -d --name=socat -p 2375:2375 -v /var/run/docker.sock:/var/run/doc
 # 也可以复用其他容器的卷的设置: -volumes-from 其他容器名或id
 ```
 
+### 清理未使用
+
+```
+docker systerm prune -a --volume --filter label=<key> util=<timstamp>
+docker [选项1] prune [选项2]
+使用案例：docker container prune -a --volume --filter label=env_mysql
+[选项1]
+-- image,container,network,volume 
+-- image 删除忍空没有Tag标记的镜像，慎用-a选
+-- container 停止运行的容器
+-- network 删除不被容器引用的网络资源
+-- volume 删除不使用的数据卷
+
+[选项2]
+-a--all 将删除悬空和当前没有关联容器实例的镜像，谨慎使用。 配置过滤器，比如：
+--filter filter   label=<key>=<value> until=<timestamp>
+-f--force  删除时不显示警告确认信息
+--volumes   删除不被引用的本地数据卷
+```
+
+
+
 ### volume
 
 #### 基础操作

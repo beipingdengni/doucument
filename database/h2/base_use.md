@@ -87,9 +87,10 @@ spring:
   datasource:
     platform: h2
     driverClassName: org.h2.Driver
-    password: sa
+    # DATABASE_TO_UPPER=false 非强制大写
+    url: jdbc:h2:mem:dbtest;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false   #jdbc:h2:~/mydb;IFEXISTS=TRUE
     username: sa
-    url: jdbc:h2:mem:dbtest
+    password: 
     schema: classpath:db/schema.sql
     data: classpath:db/data.sql
   h2: # 本地web页面 host/h2

@@ -33,3 +33,90 @@
 $  #匹配以XX结尾的行
 ```
 
+
+
+`grep` 是一种强大的文本搜索工具，它允许你在文件中搜索匹配指定模式的行。它的名字来源于全局正则表达式打印（Global Regular Expression Print）。`grep` 在 Linux 和 Unix 系统中非常常用，可以用来快速地从文件或者输出中查找特定的字符串或模式。
+
+### 基本用法
+
+```bash
+grep [选项] 模式 [文件...]
+```
+
+- `模式`：这是你想要搜索的文本或正则表达式。
+- `[文件...]`：一个或多个文件，你想要在其中搜索模式。如果不指定文件，`grep` 会从标准输入读取。
+
+### 常用选项
+
+- `-i`：忽略大小写。
+- `-v`：反向匹配，只显示不匹配的行。
+- `-c`：计数，只输出匹配行的数量。
+- `-n`：显示匹配行及其行号。
+- `-r` 或 `-R`：递归搜索目录。
+- `-l`：只输出包含匹配行的文件名。
+- `-e`：指定多个搜索模式。
+- `-f`：从文件读取模式。
+
+### 示例
+
+1. **搜索特定字符串**：在文件 `example.txt` 中搜索字符串 "hello"。
+
+   ```bash
+   grep "hello" example.txt
+   ```
+
+2. **忽略大小写**：搜索 "hello"，不区分大小写。
+
+   ```bash
+   grep -i "hello" example.txt
+   ```
+
+3. **计数匹配行**：计算文件中 "hello" 出现的次数。
+
+   ```bash
+   grep -c "hello" example.txt
+   ```
+
+4. **显示行号**：显示 "hello" 出现的行及行号。
+
+   ```bash
+   grep -n "hello" example.txt
+   ```
+
+5. **递归搜索**：在当前目录及子目录中搜索 "hello"。
+
+   ```bash
+   grep -r "hello" .
+   ```
+
+6. **反向匹配**：显示不包含 "hello" 的行。
+
+   ```bash
+   grep -v "hello" example.txt
+   ```
+
+7. **从多个文件中搜索**：在多个文件中搜索 "hello"。
+
+   ```bash
+   grep "hello" example.txt another.txt
+   ```
+
+8. **使用正则表达式**：搜索以 "h" 开头，后面跟任意字符，然后是 "llo" 的字符串。
+
+   ```bash
+   grep "h.llo" example.txt
+   ```
+
+9. **使用扩展正则表达式** (Extended Regular Expressions, ERE):
+
+   1. ```bash
+      grep -E "text+" filename
+      ```
+
+10. **匹配多个模式**:
+
+    1. ```bash
+       grep -e "text" -e "string" filename
+       ```
+
+`grep` 是一个非常灵活和强大的工具，通过熟练使用它的各种选项和正则表达式，你可以执行复杂的文本搜索和处理任务。

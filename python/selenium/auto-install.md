@@ -17,12 +17,15 @@ driver.quit()
 #传统模式加载
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
+# 创建Chrome的选项实例
 options = webdriver.ChromeOptions()
-options.add_experimental_option("excludeSwitches", ["enable-automation"])
+# 如果需要，可以设置其他选项，例如无头模式、禁用GPU等
+# options.add_argument('--headless')
+# options.add_argument('--disable-gpu')
+options.add_experimental_option("excludeSwitches", ["enable-automation"]) # 不展示浏览器控制
 options.add_experimental_option("useAutomationExtension", False)
 service = ChromeService(executable_path=CHROMEDRIVER_PATH)
 driver = webdriver.Chrome(service=service, options=options)
-
 
 
 #查找元素

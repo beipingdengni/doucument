@@ -8,8 +8,6 @@ pip install -U jieba -i https://mirrors.aliyun.com/pypi/simple/
 
 ### 分词
 
-
-
 ### 计算高频文本
 
 ```python
@@ -23,3 +21,12 @@ keywords = jieba.analyse.extract_tags(text, topK=5, withWeight=False, allowPOS=(
 print(keywords)
 ```
 
+
+
+#### NLP预备：jieba 中文分词入门（上）
+
+https://zhuanlan.zhihu.com/p/359827198
+
+#### NLP预备：jieba 中文分词入门（下）
+
+https://zhuanlan.zhihu.com/p/359825250

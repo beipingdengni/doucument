@@ -2,7 +2,7 @@
 
 #### 压缩、解压
 
-```
+```shell
 tar -zxvf elasticsearch-6.2.3.tar.gz -C /usr/local
 
 --delete : 从tar包中删除某个文件
@@ -17,6 +17,16 @@ tar -zxvf elasticsearch-6.2.3.tar.gz -C /usr/local
 -p, --preserve-permissions : 保留原文件的访问权限
 -v, --verbose : 显示命令整个执行过程
 -z, gzip : 对归档文件使用 gzip 压缩
+
+tar -zcvf /home/www/images.tar.gz /home/www/images
+
+本地复制到远程：scp -r 目录名 root@主机地址:目标路径。
+远程复制到本地：scp -r root@主机地址:目录名 目标路径。
+
+-P或--absolute-names：文件名使用绝对名称，不移除文件名称前的 “/” 号
+	注意：网上有些文档是 将 -P 参数加在 f 参数后面，那么这样是会报错的
+
+tar -zcvPf /home/tianbeiping1/code.tar.gz /home/tianbeiping1/code
 ```
 
 ## gzip(选项)(参数)

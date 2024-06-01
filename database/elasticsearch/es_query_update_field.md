@@ -70,9 +70,31 @@ curl -XPOST http://host:9200/index_name/_update_by_query -H 'Content-Type: appli
     }
   },
   "script": {
+  	"lang": "painless",
     "source": "ctx._source['sort_time'] = ctx._source['update_time']"
+    // 根据条件删除字段
+	  // "source":"ctx._source.remove(\"dept_name\")"
+	  // 更新多个字段
+	  // "source": "ctx._source.field1='1';ctx._source.2r='1';ctx._source.field3='1';"
+    // 判断条件处理数据
+    // "source": """
+    //  if (ctx._source.your_field.contains('old_string')) {
+    //    ctx._source.your_field = ctx._source.your_field.replace('old_string', 'new_string');
+    //  }
+    // """
   }
 }
 '
+
+
+curl -XPOST http://host:9200/index_name/_doc/id/_update -H 'Content-Type: application/json' -d '
+{
+  "doc": {
+    "字段": "value值"
+}
+'
+
+
+
 ```
 
