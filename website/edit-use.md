@@ -9,6 +9,8 @@
 ## quill
 
 > https://quilljs.com/ 官方网址
+>
+> 知识编辑使用此编辑器
 
 ```
 

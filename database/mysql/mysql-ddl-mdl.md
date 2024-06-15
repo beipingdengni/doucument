@@ -102,6 +102,14 @@ ALTER TABLE <表名> CHANGE <旧字段名> <新字段名> <新数据类型> COMM
 -- 删除字段
 ALTER TABLE <表名> DROP <字段名>；
 -- ALTER TABLE tb_emp1 DROP col2;
+
+--  字符类型修改
+-- 在MySQL中，InnoDB存储引擎默认的字符集是utf8,utf8mb4等,这些字符集再存储数据时没有指定排序规则的话,会默认使用utf8_general_ci或utf8mb4_general_ci 作为表的排序规则,那么该表内的数据讲不区分大小写,这两种排序规则都是case-insensitive（不区分大小写）的.   改为 utf8_bin 或者 utf8mb4_bin 是区分大小写的
+-- 表的修改
+ALTER TABLE <table_name> CONVERT TO CHARACTER SET <charset_name> COLLATE <collation_name>;
+-- 某一个字段修改
+alter table <表名> change <要修改的字段> <字段名> <数据类型> character set utf8 collate utf8_general_ci <约束条件>；
+-- alter table user_bean change address address varchar(255) character set utf8 collate utf8_general_ci not null  COMMENT '地址';
 ```
 
 ## 3、索引操作

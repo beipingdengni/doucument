@@ -133,10 +133,13 @@ if (advisorsPreFiltered()) {
 public void createJdkDynamicProxyWithAdvisor() {
   ProxyFactory proxyFactory = new ProxyFactory();
   // 执行的service
-  PerformerService performer = new PerformerService();
+  PerformerServiceImpl performer = new PerformerServiceImpl();
   proxyFactory.setTarget(performer);
-
-  proxyFactory.addInterface(Perform.class);
+	// 连接的接口类
+  // setInterfaces和setProxyInterfaces的效果是相同的。设置需要被代理的接口，
+  // 若没有实现接口，那就会采用cglib去代理
+  // 需要说明的一点是：这里不设置也能正常被代理（若你没指定，Spring内部会去帮你找到所有的接口，然后全部代理上，设置的好处是只代理指定的接口
+  proxyFactory.addInterface(PerformService.class);
   DefaultPointcutAdvisor advisor = new DefaultPointcutAdvisor();
   advisor.setAdvice(new MethodInterceptor() {
     @Override
@@ -148,7 +151,6 @@ public void createJdkDynamicProxyWithAdvisor() {
   });
 	// 添加增强
   proxyFactory.addAdvisor(advisor);
-	
   // 返回AOP代理类
   PerformerService proxy = (PerformerService) proxyFactory.getProxy();
   System.out.println("proxy class: "+proxy.getClass().getName());
@@ -156,6 +158,39 @@ public void createJdkDynamicProxyWithAdvisor() {
   proxy.sing();
 }
 
+// 直接连接service，在执行上下拦截
+ProxyFactory proxyFactory = new ProxyFactory(new HelloServiceImpl());
+// 添加两个Advise，一个匿名内部类表示
+proxyFactory.addAdvice((AfterReturningAdvice) (returnValue, method, args1, target) ->
+                       System.out.println("AfterReturningAdvice method=" + method.getName()));
+proxyFactory.addAdvice(new LogMethodBeforeAdvice()); // LogMethodBeforeAdvice implements MethodBeforeAdvice
+// 获取代理类
+HelloService proxy = (HelloService) proxyFactory.getProxy();
+proxy.hello();
+
+// 增加自定义pointcut： AspectJExpressionPointcut
+//当然你也可以使用和容器相关的ProxyFactoryBean
+ProxyFactoryBean factory = new ProxyFactoryBean();
+factory.setTarget(new Person());
+//声明一个aspectj切点,一张切面
+String pointcutExpression = "execution(* com.example.controller.*.*(..))";
+AspectJExpressionPointcut cut = new AspectJExpressionPointcut();
+cut.setExpression(pointcutExpression); // 设置切点表达式
+//声明一个通知（此处使用环绕通知 MethodInterceptor ）
+Advice advice = (MethodInterceptor) invocation -> {
+  System.out.println("============>放行前拦截...");
+  Object obj = invocation.proceed();
+  System.out.println("============>放行后拦截...");
+  return obj;
+};
+// 切面=切点+通知
+// 它还有个构造函数：DefaultPointcutAdvisor(Advice advice); 用的切面就是Pointcut.TRUE，所以如果你要指定切面，请使用自己指定的构造函数
+// Pointcut.TRUE：表示啥都返回true，也就是说这个切面作用于所有的方法上/所有的方法
+// addAdvice();方法最终内部都是被包装成一个 `DefaultPointcutAdvisor`，且使用的是Pointcut.TRUE切面，因此需要注意这些区别
+Advisor advisor = new DefaultPointcutAdvisor(cut, advice);
+factory.addAdvisor(advisor);
+//拿到代理对象
+Person p = (Person) factory.getObject();
 ```
 
 ## ProxyFactoryBean
@@ -201,7 +236,38 @@ public void createJdkDynamicProxyWithAdvisor() {
 > ```java
 > @Configuration
 > @EnableAspectJAutoProxy
+> // spring bean xml 需要配置: <aop:aspectj-autoproxy />
 > public class AppConfig {
->     // 配置类内容
+>  // 配置类内容
 > }
 > ```
+
+### aspectj 类匹配
+
+> spring-aop：AOP核心功能，例如代理工厂等
+>
+> aspectjweaver：支持切入点表达式等
+>
+> aspectjrt：支持aop相关注解等
+>
+> 注：aspectjweaver包含aspectjrt，所以我们只需要引入aspectjweaver依赖包就可以了
+
+```xml
+<dependency>
+  <groupId>org.aspectj</groupId>
+  <artifactId>aspectjweaver</artifactId>
+  <version>1.8.0</version>
+</dependency>
+```
+
+接口实现匹配类和方法
+
+```java
+AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut("execution(* service.HelloService.*(..))");
+Class<HelloService> clazz = HelloService.class;
+Method method = clazz.getDeclaredMethod("hello");
+
+System.out.println("切点表达式匹配结果-类匹配："+pointcut.matches(clazz));
+System.out.println("切点表达式匹配结果-方法匹配："+pointcut.matches(method, clazz));
+```
+

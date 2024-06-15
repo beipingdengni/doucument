@@ -1,3 +1,17 @@
+##### ES分词器
+
+https://www.cnblogs.com/xiaobaozi-95/p/9328948.html
+
+#####  分词器
+
+https://github.com/fxsjy/jieba
+https://github.com/hankcs/HanLP
+
+##### TF-IDF
+
+https://blog.csdn.net/qq_43965934/article/details/117337532
+https://zhuanlan.zhihu.com/p/51958173
+
 ## ES分词器包含三部分：
 
 ### char_filter、tokenizer、fliter
