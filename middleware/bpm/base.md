@@ -6,7 +6,17 @@ BPM语法
 
 https://blog.51cto.com/u_15463439/4857401
 
+flowable 表结构：https://blog.csdn.net/gwd1154978352/article/details/139060222
 
+
+
+## Camunda（建议使用）
+
+## activiti
+
+## flowable
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/135d26dbc1e54b78a57f2b330da27686.png)
 
 ### 中国特色流程操作概念
 
@@ -30,3 +40,6 @@ https://blog.51cto.com/u_15463439/4857401
 9. 催办：可以给当前办理人员发送催办通知消息
 10. 加签：允许当前办理人根据需要自行增加当前办理节点的办理人员
 11. 减签：在当前办理人操作之前减少办理人
+
+
+

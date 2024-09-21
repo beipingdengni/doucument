@@ -2,6 +2,10 @@
 
 ## [netty入门参考文章](https://www.toutiao.com/article/6859952200165425667/?app=news_article&group_id=6859952200165425667&req_id=202401181237032689F790DC845B00A68F&share_token=E8CF9D4A-0FA5-4D36-94D1-2A3AA4865D39&timestamp=1705552623&tt_from=copy_link&use_new_style=1&utm_campaign=client_share&utm_medium=toutiao_ios&utm_source=copy_link&source=m_redirect)
 
+博客：
+
+netty 管道和handler的加载和处理流程：https://blog.csdn.net/lipengyao2010/article/details/120223614  （包含自定义编码器）
+
 ![image-20240117211239306](imgs/netty-base/image-20240117211239306.png)
 
 ## 创建服务端
@@ -14,7 +18,7 @@ public class NettyOioServer {
         ByteBuf buf = Unpooled.unreleasableBuffer(Unpooled.copiedBuffer("Hi!\r\n", Charset.forName("UTF-8")));
      
         //EventLoopGroup group = new OioEventLoopGroup();
-       	NioEventLoopGroup bossGroup = new NioEventLoopGroup();
+       	NioEventLoopGroup bossGroup = new NioEventLoopGroup(1);
         NioEventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
             ServerBootstrap b = new ServerBootstrap();        //1

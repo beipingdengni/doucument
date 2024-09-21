@@ -19,6 +19,8 @@
 > 输入：ps -eLf | wc -l   查看当前使用的pid数
 >
 > 可以看出确实接近系统设置的最大pid个数
+>
+> ps aux --sort=-%mem | head -n 10
 
 4.解决方案
 

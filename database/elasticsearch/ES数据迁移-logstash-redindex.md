@@ -36,18 +36,17 @@ logstash 的配置文件放在 config 目录下，常用的有3个，分别是 l
 
 - logstash-sample.conf 文件为样例配置文件，可参考该文件自定义出一个业务配置文件，比如cp logstash-sample.conf es-migrate.conf，该 es-migrate.conf 作为业务配置文件非常重要。
 
+> vim es-migrate.conf.      # 以下为自定义业务配置文件内容
+
 ```
-vim es-migrate.conf
-# 以下为自定义业务配置文件内容
-
-
+# 输入
 input {
         elasticsearch {  # 定义数据源为 elasticsearch
             hosts => 源es集群地址
             user => 源es集群用户名
             password => 源es集群密码
             index => 源索引名称
-            docinfo => 默认为false，设置为true，将会提取es文档的元信息，例如index、type、id等
+            docinfo => 默认为false，设置为true，将会提取es文档的元信息，例如index、type、id等， 同步mapping 需要
             size => 设置每次scroll查询大小，默认为1000
             query => 指定查询语句
         }
@@ -59,13 +58,13 @@ filter {
             remove_field => 删除字段
         }
 }
-
-
+# 输出
 output {
         elasticsearch {  # 定义目的源为 elasticsearch
             hosts => 目的es集群地址
             user => 目的es集群用户名
             password => 目的es集群密码
+            index => "%{[@metadata][_index]}" # 保持源索引与目的索引index同步
             document_type => "%{[@metadata][_type]}" # 保持源索引与目的索引type同步
             document_id => "%{[@metadata][_id]}" # 保持源索引文档与目的索引文档id同步
         }
@@ -76,7 +75,6 @@ output {
 ```
 vim logstash.yml
 # 下面简单介绍一下常用到的一些参数配置
-
 
 # 节点名称，具备唯一性，默认为logstash主机的主机名
 node.name: logstast-node1
@@ -101,8 +99,6 @@ pipeline.workers: 8
 ```
 # Xms represents the initial size of total heap space
 # Xmx represents the maximum size of total heap space
-
-
 -Xms16g
 -Xmx16g
 ```
@@ -117,52 +113,19 @@ pipeline.workers: 8
 密码：xxxxxx
 源索引：test-migrate
 
-
 目的es集群：http://es-migrate-logstash-2.jdcloud.com:9200
 用户名：admin
 密码：xxxxxx
 目的索引：test-migrate
-
 
 注意：要保证源索引与目的索引的设置信息一致，否则可能导致源索引与目的索引字段类型等信息不一致
 例如：1、查询出源索引的表结构信息，并根据此表结构提前在目的集群中创建出目的索引
      2、若源索引有对应的索引模版，可提前将该索引模版在目的集群中创建出
 ```
 
-- vim es-migrate.conf
-
-```
-input {
-        elasticsearch {
-            hosts => ["http://es-migrate-logstash-1.jdcloud.com:9200"]
-            user => "admin"
-            password => "xxxxxx"
-            index => "test-migrate"
-            docinfo => true
-            size => 5000
-        }
-}
-
-
-filter {
-        mutate {
-            remove_field => ["@timestamp", "@version"]
-        }
-}
-
-
-output {
-        elasticsearch {
-            hosts => ["http://es-migrate-logstash-2.jdcloud.com:9200"]
-            user => "admin"
-            password => "xxxxxx"
-            index => "test-migrate"
-            document_type => "%{[@metadata][_type]}"
-            document_id => "%{[@metadata][_id]}"
-        }
-```
-
-- vim logstash.yml
+- vim jvm.options 配置，参考以上
+- vim es-migrate.conf 配置，参考以上
+- vim logstash.yml  配置，如下举例
 
 ```
 node.name: logstast-node1
@@ -173,17 +136,6 @@ log.level: info
 pipeline.batch.size: 5000
 pipeline.batch.delay: 10
 pipeline.workers: 5
-```
-
-- vim jvm.options
-
-```
-# Xms represents the initial size of total heap space
-# Xmx represents the maximum size of total heap space
-
-
--Xms16g
--Xmx16g
 ```
 
 - 启动 logstash

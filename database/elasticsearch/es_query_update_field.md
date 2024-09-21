@@ -2,13 +2,20 @@
 
 ### 指定索引更新字段
 
-```
+```shell
 POST ${index_name}/${_doc}/${_id}/_update
 {
   "doc" : {
         "field_name" : field_value
     }
 }
+
+curl -XPOST http://host:9200/index_name/_doc/id/_update -H 'Content-Type: application/json' -d '
+{
+  "doc": {
+    "字段": "value值"
+}
+'
 ```
 
 #### 查询更新
@@ -85,16 +92,5 @@ curl -XPOST http://host:9200/index_name/_update_by_query -H 'Content-Type: appli
   }
 }
 '
-
-
-curl -XPOST http://host:9200/index_name/_doc/id/_update -H 'Content-Type: application/json' -d '
-{
-  "doc": {
-    "字段": "value值"
-}
-'
-
-
-
 ```
 

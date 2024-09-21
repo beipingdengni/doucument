@@ -103,3 +103,35 @@ case "$string" in
 esac
 ```
 
+
+
+参考实现，字符截取
+
+```shell
+#!/bin/bash
+# 字符
+IPList="172.20.59.238:34994,172.20.59.21:34994,172.20.59.28:34994"
+# 分割字符串为数组
+IPNew1=${IPList//,/ }
+# 定义一个原始的字符串
+str=""
+for i in $IPNew1
+do	
+	# 分离开字符，获取其中
+  ip=`echo $i|awk -F ":" '{print $1}'`
+  port=`echo $i|awk -F ":" '{print $2}'`
+	# 循环中实现字符串的拼接
+  str="          <domain>
+            <host>$ip</host>
+            <port>$port</port>
+        </domain>\n""$str"
+done
+# 输出结果
+echo -ne "$str"
+# 以下是参考输出结果
+<domain>
+  <host>IP信息</host>
+  <port>端口号</port>
+</domain>
+```
+

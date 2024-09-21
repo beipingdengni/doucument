@@ -175,7 +175,7 @@ PUT /my_index
 > 为现有索引添加自定义分析器： 如果索引已经存在，你需要先关闭索引，然后更新设置，并重新打开索引：
 
 ```http
-hPOST /my_index/_close
+POST /my_index/_close
 
 PUT /my_index/_settings
 {

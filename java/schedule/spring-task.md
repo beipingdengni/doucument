@@ -163,3 +163,96 @@ public class DynamicScheduleTask implements SchedulingConfigurer {
 }
 ```
 
+### 其他的实现方式（自定义）
+
+```java
+@Configuration
+public class SchedulingConfig {
+		// 需要的任务现场池
+    @Bean
+    public TaskScheduler taskScheduler() {
+        // 获取系统处理器个数, 作为线程池数量
+        int corePoolSize = Runtime.getRuntime().availableProcessors();
+        ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
+        // 定时任务执行线程池核心线程数
+        taskScheduler.setPoolSize(corePoolSize);
+        taskScheduler.setRemoveOnCancelPolicy(true);
+        taskScheduler.setThreadNamePrefix("AntiFraudSchedulerThreadPool-");
+        return taskScheduler;
+    }
+}
+// 创建ScheduledTask包装类 ScheduledFuture是ScheduledFuture<?> schedule(Runnable task, Trigger trigger)方法的返回值。
+
+//ScheduledFuture继承了Future接口，Future接口提供一组辅助方法，比如：
+//	cancel()：取消任务
+//	isCancelled()：任务是不是取消了
+//	isDone()：任务是不是已经完成了
+//	get()：用来获取执行结果
+
+// 调度类里面可以取消
+// 调用cancel方法时，会将我们的任务从workQueue中移除
+public final class ScheduledTask {
+		// 远程调用
+    public volatile ScheduledFuture<?> future;
+		// 取消定时任务
+    public void cancel() {
+        ScheduledFuture<?> scheduledFuture = this.future;
+        if (Objects.nonNull(scheduledFuture)) {
+            scheduledFuture.cancel(true);
+        }
+    }
+}
+
+//  自动增加定时任务
+@Slf4j
+@Component
+public class CronTaskRegistrar implements DisposableBean {
+
+    @Resource
+    private TaskScheduler taskScheduler;
+
+    // 保存任务Id和定时任务
+    private final Map<String, ScheduledTask> scheduledTaskMap = new ConcurrentHashMap<>(64);
+
+    // 添加任务
+    public void addTask(Runnable task, String cronExpression,String jobId) {
+        addTask(new CronTask(task, cronExpression),jobId);
+    }
+
+    public void addTask(CronTask cronTask,String jobId) {
+        if (Objects.nonNull(cronTask)) {
+            Runnable task = cronTask.getRunnable();
+            if (this.scheduledTaskMap.containsKey(task)) {
+                removeTask(jobId);
+            }
+            // 保存任务Id和定时任务
+            this.scheduledTaskMap.put(jobId, scheduleTask(cronTask));
+        }
+    }
+
+    // 通过任务Id，取消定时任务
+    public void removeTask(String jobId) {
+        ScheduledTask scheduledTask = this.scheduledTaskMap.remove(jobId);
+        if (Objects.nonNull(scheduledTask)) {
+            scheduledTask.cancel();
+        }
+    }
+
+    public ScheduledTask scheduleTask(CronTask cronTask) {
+        ScheduledTask scheduledTask = new ScheduledTask();
+        scheduledTask.future = this.taskScheduler.schedule(cronTask.getRunnable(), cronTask.getTrigger());
+        return scheduledTask;
+    }
+
+    // 销毁
+    @Override
+    public void destroy() {
+        this.scheduledTaskMap.values().forEach(ScheduledTask::cancel);
+        this.scheduledTaskMap.clear();
+    }
+}
+
+// 添加顺序
+// cron--》runable--》CronTask--》ScheduledTask--》taskScheduler
+```
+

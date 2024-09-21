@@ -1,0 +1,129 @@
+ 
+
+gcc编译
+-----
+
+使用gcc编译，我们可以对编译过程有跟多的控制，编译阶段分成三个
+
+*   预处理
+*   汇编
+*   连接
+
+gcc是一个交叉编译器，在不同的平台上可以开发软件
+
+eg：
+
+`gcc -o hello hello.c`  
+代表的意思是：编译一个hello.c文件，对应生成的名称为hello的可执行文件。
+
+看起来是一步合成，但是确实分成了三部，预编译源代码，编译目标代码，连接程序。
+
+> **步骤**:
+
+```
+源代码*.c-->预处理器-->编译器-->目标代理*.o-->连接器-->可执行文件
+              |                            |
+              |                            |
+            头文件.h                      库代码
+```
+
+预编译
+---
+
+`gcc -o hello1.c -E hello.c`(其中`-E`是预编译添加的参数)  
+这个意思是：gcc对源程序hello.c进行预编译，预编译的结果输出到hello1.c中
+
+```
+做的事情是：
+将#include<XX>这个里面的内容写到一个文件中
+```
+
+编译
+--
+
+`gcc -o hello.o -c hello1.c`(其中`-c`是编译添加的参数)  
+这个意思是：gcc对源程序hello.c进行编译，但不连接，编译输出到hello.o中
+
+此时生成了hello.o这个里面是二进制（机器指令）但是没有连接
+
+连接
+--
+
+`gcc -o hello hello.o`  
+对hello.o进行连接生成可执行程序hello
+
+使用
+--
+
+一般我们不使用`-E`参数，`gcc -o hello.o -c hello.c`,直接将hello.c文件生成hello.o文件，然后把hello.o文件进行连接`gcc -o hello hello.o`
+
+拓展问题
+----
+
+当然上面只有一个文件，比如我们现在增加一个文件`add.h`，我们在hello.c中用到其中的`add.h`里面定义的`add`函数，这个时候我们使用下面命令：
+
+```
+gcc -o hello.o -c hello.c
+gcc -o hello hello.o
+这里会报错：
+说是add函数引起的错误
+```
+
+这是由于add.h并没有编译成二进制机器识别命令，也没有连接到hello.o中  
+那么正确的做法是什么呢？
+
+```
+gcc -o hello.o -c hello.c
+gcc -o add.o -c add.c         //编译add.c代码生成add.o二进制机器指令
+gcc -o hello hello.o add.o    //生成hello可执行程序，依赖于hello.o和add.o二进制机器代码
+```
+
+gcc识别文件类型
+---------
+
+*   .c C语言源文件
+*   .cpp C++源文件
+*   .s 汇编语言源文件
+*   .o 编译后的目标代码文件
+*   .a,.so 编译后的库文件
+
+连接问题
+----
+
+我们写的c代码，编译连接都没有问题，但是我们使用c++连接我们写的c代码的时候就有问题，这是为什么？
+
+因为：C++和C本身就是两种完全不同的语言，比如现在`gcc -o hello hello.cpp`这句话就会报错，因为gcc默认是用c的库编译，所以编译c++就会出现连接库的问题。编译阶段正常是因为语法正常，连接阶段报错是因为库不对
+
+那么怎么改呢？
+
+```
+gcc -o hello.o -c hello.cpp
+gcc -o hello hello.o -lstdc++
+```
+
+其中-l是指定库，其中c++的库是`libstdc++.so`
+
+> 还要注意一个细节
+
+```
+gcc -o hello hello.c
+nm hello
+使用nm命令查看标号
+里面有main，add等自定义函数标号
+```
+
+但是我们使用：
+
+```
+mv hello.c hello.cpp       //修改名字
+gcc -o hello hello.cpp -lstdc++    //生成可执行文件hello
+nm hello
+下面出现的add不见了，取而代之的是系统生成另外一个名字的函数_Z3addii
+```
+
+所以当生成动态库的时候不能使用C++文件进行编译必须是用C，因为使用C++文件编译会出现找不到函数的情况
+
+g++
+---
+
+编译C++项目需要使用g++

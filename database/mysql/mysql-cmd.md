@@ -8,21 +8,20 @@ mysql -h localhost -P3306 -uroot -p123456
 
 ## 执行sql文件
 
-```
+```shell
 # 进入交互界面执行 source ./test.sql
-
 mysql -uroot -p123456 -D cs_event < ./test.sql
 ```
 
 ### 查询innodb状态
 
-```
+```sql
 SHOW ENGINE INNODB STATUS;
 ```
 
 ### 查看时区
 
-```
+```sql
 show variables like '%time_zone%'
 或
 select @@system_time_zone,@@time_zone;

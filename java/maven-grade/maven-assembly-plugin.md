@@ -32,6 +32,7 @@
 	</filters>
   <plugins>
     <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-compiler-plugin</artifactId>
       <version>3.8.1</version>
       <configuration>
@@ -127,7 +128,7 @@
 
 
 
-### 无配置并定义启动类启动类
+### 无配置并定义启动类启动类()
 
 ```xml
 <plugin>
@@ -148,10 +149,10 @@
   <!-- 相当于在执行 package 打包时，在后面加上 assembly:single  -->
   <executions>
     <execution>
-      <id>make-assembly</id>
-      <phase>package</phase>
+      <id>make-assembly2</id><!--名字任意 -->
+      <phase>package</phase><!-- 绑定到package生命周期阶段上 -->
       <goals>
-        <goal>single</goal>
+        <goal>single</goal><!-- 只运行一次 -->
       </goals>
     </execution>
   </executions>

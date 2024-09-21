@@ -55,6 +55,8 @@
 
 ```shell
 mvn clean install -U
+
+mvn clean install -U -s ～/m2/settins.xml
 ```
 
 ## 查看依赖
@@ -84,6 +86,9 @@ mvn dependency:list-repositories
 ## 清理包依赖
 
 ```shell
+# 删除本地仓库的元数据
+rm -rf ~/.m2/repository/org/apache/maven/plugins
+# 清除 Maven 的依赖项解析缓存
 #项目全部清除 该命令可以清除本地仓库中所有的缓存，包括依赖库和插件等
 mvn dependency:purge-local-repository
 
