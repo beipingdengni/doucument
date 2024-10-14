@@ -2,7 +2,7 @@
 
 ```shell
 # 查看父子进程
-ps axfww   
+ps axfw
 ```
 
 # 计算机的检查资源使用

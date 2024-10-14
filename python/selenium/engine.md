@@ -1,6 +1,10 @@
 # selenium
 
-# [Selenium网址](https://www.cnblogs.com/xmlbw/p/4402859.html)
+## 安装参考
+
+https://pypi.org/project/selenium/
+
+## [Selenium网址](https://www.cnblogs.com/xmlbw/p/4402859.html)
 
 Selenium官网：http://www.seleniumhq.org/
 
